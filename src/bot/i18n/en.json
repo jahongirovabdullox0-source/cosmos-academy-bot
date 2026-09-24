@@ -1,0 +1,59 @@
+{
+  "menu": {
+    "courses": "📚 Courses",
+    "results": "🏆 Our results",
+    "contact": "📞 Contact us",
+    "language": "🌐 Change language",
+    "openApp": "🚀 Open Mini App",
+    "openAppButton": "🚀 Open",
+    "registerButton": "✍️ Register"
+  },
+  "commands": {
+    "start": "Start the bot",
+    "til": "Change language",
+    "kurslar": "List of courses",
+    "natijalar": "Our achievements",
+    "aloqa": "Contact information",
+    "app": "Open the Mini App"
+  },
+  "welcome": {
+    "chooseLanguage": "🌍 Tilni tanlang\n🌍 Please choose your language\n🌍 Пожалуйста, выберите язык",
+    "greeting": "Hello, {{name}}! 👋\n\nWelcome to the <b>Cosmos Academy</b> bot — an English language center operating since 2019!\n\nHere you can:\n📚 Explore our courses and prices\n🏆 See the center's achievements\n✍️ Register for a course\n📞 Contact us\n\nUse the buttons below or open the Mini App for the full experience 👇",
+    "backAgain": "Welcome back, {{name}}! 👋\n\nUse the buttons below or open the Mini App 👇"
+  },
+  "language": {
+    "changed": "✅ Language changed to English",
+    "prompt": "🌍 Choose a language:"
+  },
+  "courses": {
+    "header": "📚 <b>Cosmos Academy courses</b>\n",
+    "line": "\n{{icon}} <b>{{title}}</b>\n{{description}}\n💰 Price: {{price}} UZS{{duration}}\n",
+    "footer": "\nOpen the Mini App for details and registration 👇",
+    "durationSuffix": " / {{duration}}",
+    "empty": "The course list is being updated. Please check back shortly."
+  },
+  "results": {
+    "header": "🏆 <b>Cosmos Academy achievements</b>\n",
+    "line": "\n✅ <b>{{value}}</b> {{title}}",
+    "footer": "\n\nOpen the Mini App for more details 👇",
+    "empty": "The achievements list is being updated."
+  },
+  "contact": {
+    "header": "📞 <b>Contact us</b>\n",
+    "phones": "\n☎️ Phone: {{phones}}",
+    "address": "\n📍 Address: {{address}}",
+    "hours": "\n🕒 Working hours: {{hours}}",
+    "instagram": "\n📷 Instagram: {{link}}",
+    "telegram": "\n✈️ Telegram: {{link}}",
+    "footer": "\n\nOpen the Mini App for more details 👇"
+  },
+  "fallback": {
+    "text": "Sorry, I didn't understand that 🙂\n\nUse the buttons below or open the Mini App for the full experience 👇"
+  },
+  "registration": {
+    "confirmed": "✅ <b>Your application has been received!</b>\n\n📚 Course: {{course}}\n👤 Name: {{name}}\n📱 Phone: {{phone}}\n\nOur team will contact you shortly. Thank you! 🙏"
+  },
+  "broadcast": {
+    "prefix": "📢 <b>Cosmos Academy announcement</b>\n\n"
+  }
+}

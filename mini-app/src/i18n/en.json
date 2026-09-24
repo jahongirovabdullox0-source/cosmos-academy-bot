@@ -1,0 +1,83 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "somUnit": "UZS",
+    "empty": "No information yet"
+  },
+  "nav": {
+    "home": "Home",
+    "courses": "Courses",
+    "results": "Results",
+    "profile": "Profile"
+  },
+  "onboarding": {
+    "slide1Title": "Welcome to Cosmos Academy",
+    "slide1Text": "Providing quality English education since 2019",
+    "slide2Title": "From A1 to IELTS",
+    "slide2Text": "We have the right course for every level",
+    "slide3Title": "Let's achieve results together",
+    "slide3Text": "Over 500 of our graduates have succeeded",
+    "start": "Get started"
+  },
+  "home": {
+    "greeting": "Hello, {{name}}! 👋",
+    "tagline": "Learn English with us",
+    "coursesCta": "View courses",
+    "resultsCta": "Our results",
+    "contactCta": "Contact us",
+    "aboutTitle": "About the center"
+  },
+  "courses": {
+    "title": "Courses",
+    "priceLabel": "Price",
+    "durationLabel": "Duration",
+    "registerButton": "Register",
+    "detailsButton": "Details",
+    "empty": "No courses available yet"
+  },
+  "register": {
+    "title": "Registration",
+    "courseLabel": "Course",
+    "nameLabel": "Full name",
+    "namePlaceholder": "First Last",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "+998 90 123 45 67",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "success": "Your application has been received!",
+    "successText": "Our team will contact you shortly.",
+    "errorName": "Please enter your name (at least 2 letters)",
+    "errorPhone": "Please enter a valid phone number",
+    "done": "Got it"
+  },
+  "results": {
+    "title": "Our results",
+    "empty": "No information yet"
+  },
+  "contact": {
+    "title": "Contact us",
+    "phones": "Phone numbers",
+    "address": "Address",
+    "hours": "Working hours",
+    "social": "Social media",
+    "openMap": "Open in maps",
+    "call": "Call"
+  },
+  "profile": {
+    "title": "Profile",
+    "language": "Language",
+    "myRegistrations": "My applications",
+    "noRegistrations": "You have no applications yet",
+    "statusNEW": "New",
+    "statusCONTACTED": "Contacted",
+    "statusCONFIRMED": "Confirmed",
+    "statusCANCELLED": "Cancelled",
+    "about": "About Cosmos Academy"
+  }
+}

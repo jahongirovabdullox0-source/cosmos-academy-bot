@@ -1,0 +1,83 @@
+{
+  "common": {
+    "loading": "Yuklanmoqda...",
+    "error": "Xatolik yuz berdi",
+    "retry": "Qayta urinish",
+    "back": "Orqaga",
+    "save": "Saqlash",
+    "cancel": "Bekor qilish",
+    "close": "Yopish",
+    "somUnit": "so'm",
+    "empty": "Hozircha ma'lumot yo'q"
+  },
+  "nav": {
+    "home": "Bosh sahifa",
+    "courses": "Kurslar",
+    "results": "Natijalar",
+    "profile": "Profil"
+  },
+  "onboarding": {
+    "slide1Title": "Cosmos Academyga xush kelibsiz",
+    "slide1Text": "2019-yildan buyon sifatli ingliz tili ta'limi beramiz",
+    "slide2Title": "A1 dan IELTS gacha",
+    "slide2Text": "Har qanday darajadagi o'quvchi uchun mos kurs topamiz",
+    "slide3Title": "Natijalarga birga erishamiz",
+    "slide3Text": "500 dan ortiq bitiruvchimiz muvaffaqiyatga erishgan",
+    "start": "Boshlash"
+  },
+  "home": {
+    "greeting": "Assalomu alaykum, {{name}}! 👋",
+    "tagline": "Ingliz tilini biz bilan o'rganing",
+    "coursesCta": "Kurslarni ko'rish",
+    "resultsCta": "Natijalarimiz",
+    "contactCta": "Biz bilan bog'lanish",
+    "aboutTitle": "Markaz haqida"
+  },
+  "courses": {
+    "title": "Kurslar",
+    "priceLabel": "Narxi",
+    "durationLabel": "Davomiyligi",
+    "registerButton": "Ro'yxatdan o'tish",
+    "detailsButton": "Batafsil",
+    "empty": "Hozircha kurslar mavjud emas"
+  },
+  "register": {
+    "title": "Ro'yxatdan o'tish",
+    "courseLabel": "Kurs",
+    "nameLabel": "Ism va familiya",
+    "namePlaceholder": "Ism Familiya",
+    "phoneLabel": "Telefon raqami",
+    "phonePlaceholder": "+998 90 123 45 67",
+    "submit": "Yuborish",
+    "submitting": "Yuborilmoqda...",
+    "success": "Arizangiz qabul qilindi!",
+    "successText": "Tez orada operatorlarimiz siz bilan bog'lanadi.",
+    "errorName": "Ismingizni kiriting (kamida 2 harf)",
+    "errorPhone": "Telefon raqamini to'g'ri kiriting",
+    "done": "Tushunarli"
+  },
+  "results": {
+    "title": "Bizning natijalarimiz",
+    "empty": "Hozircha ma'lumot yo'q"
+  },
+  "contact": {
+    "title": "Biz bilan bog'lanish",
+    "phones": "Telefon raqamlari",
+    "address": "Manzil",
+    "hours": "Ish vaqti",
+    "social": "Ijtimoiy tarmoqlar",
+    "openMap": "Xaritada ko'rish",
+    "call": "Qo'ng'iroq qilish"
+  },
+  "profile": {
+    "title": "Profil",
+    "language": "Til",
+    "myRegistrations": "Mening arizalarim",
+    "noRegistrations": "Sizda hali arizalar yo'q",
+    "statusNEW": "Yangi",
+    "statusCONTACTED": "Bog'lanildi",
+    "statusCONFIRMED": "Tasdiqlandi",
+    "statusCANCELLED": "Bekor qilindi",
+    "about": "Cosmos Academy haqida"
+  }
+}

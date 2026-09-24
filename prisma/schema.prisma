@@ -1,0 +1,128 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Language {
+  uz
+  en
+  ru
+}
+
+enum RegistrationStatus {
+  NEW
+  CONTACTED
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  telegramId    String         @unique
+  firstName     String?
+  lastName      String?
+  username      String?
+  phone         String?
+  language      Language       @default(uz)
+  isBlocked     Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  registrations Registration[]
+
+  @@index([language])
+  @@index([createdAt])
+}
+
+model Course {
+  id            Int            @id @default(autoincrement())
+  code          String         @unique
+  order         Int            @default(0)
+  isActive      Boolean        @default(true)
+  icon          String         @default("📘")
+  titleUz       String
+  titleEn       String
+  titleRu       String
+  descriptionUz String         @db.Text
+  descriptionEn String         @db.Text
+  descriptionRu String         @db.Text
+  price         Decimal        @db.Decimal(18, 2)
+  duration      String?
+  registrations Registration[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([isActive, order])
+}
+
+model Registration {
+  id        Int                @id @default(autoincrement())
+  userId    Int
+  user      User               @relation(fields: [userId], references: [id])
+  courseId  Int
+  course    Course             @relation(fields: [courseId], references: [id])
+  fullName  String
+  phone     String
+  status    RegistrationStatus @default(NEW)
+  note      String?            @db.Text
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@index([status, createdAt])
+  @@index([courseId])
+  @@index([userId])
+}
+
+model Achievement {
+  id            Int      @id @default(autoincrement())
+  order         Int      @default(0)
+  isActive      Boolean  @default(true)
+  value         String?
+  titleUz       String
+  titleEn       String
+  titleRu       String
+  descriptionUz String?  @db.Text
+  descriptionEn String?  @db.Text
+  descriptionRu String?  @db.Text
+  imageUrl      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([isActive, order])
+}
+
+model CenterInfo {
+  id         Int      @id @default(1)
+  nameUz     String
+  nameEn     String
+  nameRu     String
+  aboutUz    String   @db.Text
+  aboutEn    String   @db.Text
+  aboutRu    String   @db.Text
+  phones     String[]
+  addressUz  String
+  addressEn  String
+  addressRu  String
+  latitude   Float?
+  longitude  Float?
+  instagram  String?
+  telegram   String?
+  facebook   String?
+  youtube    String?
+  workHours  String?
+  logoUrl    String?
+  updatedAt  DateTime @updatedAt
+}
+
+model BroadcastLog {
+  id        Int      @id @default(autoincrement())
+  text      String   @db.Text
+  sentCount Int      @default(0)
+  failCount Int      @default(0)
+  createdAt DateTime @default(now())
+}

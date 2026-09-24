@@ -1,0 +1,59 @@
+{
+  "menu": {
+    "courses": "📚 Kurslar",
+    "results": "🏆 Natijalarimiz",
+    "contact": "📞 Biz bilan bog'lanish",
+    "language": "🌐 Tilni o'zgartirish",
+    "openApp": "🚀 Mini App'ni ochish",
+    "openAppButton": "🚀 Ochish",
+    "registerButton": "✍️ Ro'yxatdan o'tish"
+  },
+  "commands": {
+    "start": "Botni ishga tushirish",
+    "til": "Tilni o'zgartirish",
+    "kurslar": "Kurslar ro'yxati",
+    "natijalar": "Markaz yutuqlari",
+    "aloqa": "Aloqa ma'lumotlari",
+    "app": "Mini App'ni ochish"
+  },
+  "welcome": {
+    "chooseLanguage": "🌍 Tilni tanlang\n🌍 Please choose your language\n🌍 Пожалуйста, выберите язык",
+    "greeting": "Assalomu alaykum, {{name}}! 👋\n\n<b>Cosmos Academy</b> — 2019-yildan buyon faoliyat yuritayotgan ingliz tili o'quv markazi botiga xush kelibsiz!\n\nBu yerda siz:\n📚 Kurslar va narxlar bilan tanishasiz\n🏆 Markaz yutuqlarini ko'rasiz\n✍️ Kursga ro'yxatdan o'tasiz\n📞 Biz bilan bog'lanasiz\n\nPastdagi tugmalardan foydalaning yoki to'liq imkoniyatlar uchun Mini App'ni oching 👇",
+    "backAgain": "Yana xush kelibsiz, {{name}}! 👋\n\nQuyidagi tugmalardan foydalaning yoki Mini App'ni oching 👇"
+  },
+  "language": {
+    "changed": "✅ Til o'zbek tiliga o'zgartirildi",
+    "prompt": "🌍 Tilni tanlang:"
+  },
+  "courses": {
+    "header": "📚 <b>Cosmos Academy kurslari</b>\n",
+    "line": "\n{{icon}} <b>{{title}}</b>\n{{description}}\n💰 Narxi: {{price}} so'm{{duration}}\n",
+    "footer": "\nBatafsil ma'lumot va ro'yxatdan o'tish uchun Mini App'ni oching 👇",
+    "durationSuffix": " / {{duration}}",
+    "empty": "Hozircha kurslar ro'yxati yangilanmoqda. Birozdan so'ng qayta urinib ko'ring."
+  },
+  "results": {
+    "header": "🏆 <b>Cosmos Academy yutuqlari</b>\n",
+    "line": "\n✅ <b>{{value}}</b> {{title}}",
+    "footer": "\n\nBatafsil ma'lumot uchun Mini App'ni oching 👇",
+    "empty": "Hozircha yutuqlar ro'yxati yangilanmoqda."
+  },
+  "contact": {
+    "header": "📞 <b>Biz bilan bog'lanish</b>\n",
+    "phones": "\n☎️ Telefon: {{phones}}",
+    "address": "\n📍 Manzil: {{address}}",
+    "hours": "\n🕒 Ish vaqti: {{hours}}",
+    "instagram": "\n📷 Instagram: {{link}}",
+    "telegram": "\n✈️ Telegram: {{link}}",
+    "footer": "\n\nBatafsil ma'lumot uchun Mini App'ni oching 👇"
+  },
+  "fallback": {
+    "text": "Kechirasiz, buni tushunmadim 🙂\n\nQuyidagi tugmalardan foydalaning yoki to'liq imkoniyatlar uchun Mini App'ni oching 👇"
+  },
+  "registration": {
+    "confirmed": "✅ <b>Arizangiz qabul qilindi!</b>\n\n📚 Kurs: {{course}}\n👤 Ism: {{name}}\n📱 Telefon: {{phone}}\n\nTez orada operatorlarimiz siz bilan bog'lanadi. Rahmat! 🙏"
+  },
+  "broadcast": {
+    "prefix": "📢 <b>Cosmos Academy xabari</b>\n\n"
+  }
+}

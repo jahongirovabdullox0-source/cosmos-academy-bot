@@ -1,0 +1,59 @@
+{
+  "menu": {
+    "courses": "📚 Курсы",
+    "results": "🏆 Наши результаты",
+    "contact": "📞 Связаться с нами",
+    "language": "🌐 Изменить язык",
+    "openApp": "🚀 Открыть Mini App",
+    "openAppButton": "🚀 Открыть",
+    "registerButton": "✍️ Записаться"
+  },
+  "commands": {
+    "start": "Запустить бота",
+    "til": "Изменить язык",
+    "kurslar": "Список курсов",
+    "natijalar": "Наши достижения",
+    "aloqa": "Контактная информация",
+    "app": "Открыть Mini App"
+  },
+  "welcome": {
+    "chooseLanguage": "🌍 Tilni tanlang\n🌍 Please choose your language\n🌍 Пожалуйста, выберите язык",
+    "greeting": "Здравствуйте, {{name}}! 👋\n\nДобро пожаловать в бот <b>Cosmos Academy</b> — учебного центра английского языка, работающего с 2019 года!\n\nЗдесь вы можете:\n📚 Ознакомиться с курсами и ценами\n🏆 Увидеть достижения центра\n✍️ Записаться на курс\n📞 Связаться с нами\n\nИспользуйте кнопки ниже или откройте Mini App для полного доступа 👇",
+    "backAgain": "С возвращением, {{name}}! 👋\n\nИспользуйте кнопки ниже или откройте Mini App 👇"
+  },
+  "language": {
+    "changed": "✅ Язык изменён на русский",
+    "prompt": "🌍 Выберите язык:"
+  },
+  "courses": {
+    "header": "📚 <b>Курсы Cosmos Academy</b>\n",
+    "line": "\n{{icon}} <b>{{title}}</b>\n{{description}}\n💰 Цена: {{price}} сум{{duration}}\n",
+    "footer": "\nОткройте Mini App для подробностей и записи 👇",
+    "durationSuffix": " / {{duration}}",
+    "empty": "Список курсов обновляется. Загляните немного позже."
+  },
+  "results": {
+    "header": "🏆 <b>Достижения Cosmos Academy</b>\n",
+    "line": "\n✅ <b>{{value}}</b> {{title}}",
+    "footer": "\n\nОткройте Mini App для подробностей 👇",
+    "empty": "Список достижений обновляется."
+  },
+  "contact": {
+    "header": "📞 <b>Связаться с нами</b>\n",
+    "phones": "\n☎️ Телефон: {{phones}}",
+    "address": "\n📍 Адрес: {{address}}",
+    "hours": "\n🕒 Часы работы: {{hours}}",
+    "instagram": "\n📷 Instagram: {{link}}",
+    "telegram": "\n✈️ Telegram: {{link}}",
+    "footer": "\n\nОткройте Mini App для подробностей 👇"
+  },
+  "fallback": {
+    "text": "Извините, я не понял 🙂\n\nИспользуйте кнопки ниже или откройте Mini App для полного доступа 👇"
+  },
+  "registration": {
+    "confirmed": "✅ <b>Ваша заявка принята!</b>\n\n📚 Курс: {{course}}\n👤 Имя: {{name}}\n📱 Телефон: {{phone}}\n\nНаши операторы свяжутся с вами в ближайшее время. Спасибо! 🙏"
+  },
+  "broadcast": {
+    "prefix": "📢 <b>Объявление Cosmos Academy</b>\n\n"
+  }
+}

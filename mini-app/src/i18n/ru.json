@@ -1,0 +1,83 @@
+{
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Произошла ошибка",
+    "retry": "Повторить",
+    "back": "Назад",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "close": "Закрыть",
+    "somUnit": "сум",
+    "empty": "Пока нет информации"
+  },
+  "nav": {
+    "home": "Главная",
+    "courses": "Курсы",
+    "results": "Результаты",
+    "profile": "Профиль"
+  },
+  "onboarding": {
+    "slide1Title": "Добро пожаловать в Cosmos Academy",
+    "slide1Text": "Качественное образование по английскому языку с 2019 года",
+    "slide2Title": "От A1 до IELTS",
+    "slide2Text": "Подберём подходящий курс для любого уровня",
+    "slide3Title": "Достигнем результатов вместе",
+    "slide3Text": "Более 500 наших выпускников добились успеха",
+    "start": "Начать"
+  },
+  "home": {
+    "greeting": "Здравствуйте, {{name}}! 👋",
+    "tagline": "Изучайте английский с нами",
+    "coursesCta": "Смотреть курсы",
+    "resultsCta": "Наши результаты",
+    "contactCta": "Связаться с нами",
+    "aboutTitle": "О центре"
+  },
+  "courses": {
+    "title": "Курсы",
+    "priceLabel": "Цена",
+    "durationLabel": "Продолжительность",
+    "registerButton": "Записаться",
+    "detailsButton": "Подробнее",
+    "empty": "Пока нет доступных курсов"
+  },
+  "register": {
+    "title": "Запись на курс",
+    "courseLabel": "Курс",
+    "nameLabel": "Имя и фамилия",
+    "namePlaceholder": "Имя Фамилия",
+    "phoneLabel": "Номер телефона",
+    "phonePlaceholder": "+998 90 123 45 67",
+    "submit": "Отправить",
+    "submitting": "Отправка...",
+    "success": "Ваша заявка принята!",
+    "successText": "Наши операторы скоро свяжутся с вами.",
+    "errorName": "Введите имя (минимум 2 буквы)",
+    "errorPhone": "Введите корректный номер телефона",
+    "done": "Понятно"
+  },
+  "results": {
+    "title": "Наши результаты",
+    "empty": "Пока нет информации"
+  },
+  "contact": {
+    "title": "Связаться с нами",
+    "phones": "Номера телефонов",
+    "address": "Адрес",
+    "hours": "Часы работы",
+    "social": "Социальные сети",
+    "openMap": "Открыть на карте",
+    "call": "Позвонить"
+  },
+  "profile": {
+    "title": "Профиль",
+    "language": "Язык",
+    "myRegistrations": "Мои заявки",
+    "noRegistrations": "У вас пока нет заявок",
+    "statusNEW": "Новая",
+    "statusCONTACTED": "Связались",
+    "statusCONFIRMED": "Подтверждена",
+    "statusCANCELLED": "Отменена",
+    "about": "О Cosmos Academy"
+  }
+}

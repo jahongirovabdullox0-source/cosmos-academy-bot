@@ -1,0 +1,40 @@
+{
+  "name": "cosmos-academy-bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cosmos Academy — Telegram bot, Mini App va Admin Panel",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "start": "node src/index.js",
+    "db:push": "prisma db push --schema=prisma/schema.prisma",
+    "db:deploy": "prisma generate --schema=prisma/schema.prisma && prisma db push --schema=prisma/schema.prisma --accept-data-loss",
+    "db:seed": "node prisma/seed.js",
+    "db:studio": "prisma studio --schema=prisma/schema.prisma",
+    "prisma:generate": "prisma generate --schema=prisma/schema.prisma",
+    "mini-app:install": "npm install --prefix mini-app",
+    "mini-app:build": "npm run build --prefix mini-app",
+    "admin-panel:install": "npm install --prefix admin-panel",
+    "admin-panel:build": "npm run build --prefix admin-panel"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.3.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "exceljs": "^4.4.0",
+    "express": "^4.21.2",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "prisma": "^6.3.1",
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "allowScripts": {
+    "@prisma/client@6.19.3": true,
+    "@prisma/engines@6.19.3": true,
+    "prisma@6.19.3": true
+  }
+}
