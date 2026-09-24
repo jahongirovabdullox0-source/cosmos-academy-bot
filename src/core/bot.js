@@ -71,6 +71,14 @@ function getWebhookPath() {
   return `/webhook/${crypto.createHash('sha256').update(config.botToken || 'no-token').digest('hex').slice(0, 32)}`;
 }
 
+// Telegram secret_token faqat A-Z, a-z, 0-9, "_", "-" belgilarini qabul qiladi.
+// WEBHOOK_SECRET .env/hosting tomonidan (masalan Render'ning generateValue) har xil
+// formatda (base64 "=" bilan va h.k.) kelishi mumkin — shuning uchun uni doim
+// xavfsiz hex ko'rinishga o'giramiz.
+function getSafeSecretToken() {
+  return crypto.createHash('sha256').update(config.webhookSecret || 'no-secret').digest('hex');
+}
+
 async function startBot() {
   if (!bot) return { mode: 'disabled' };
 
@@ -80,7 +88,7 @@ async function startBot() {
   if (config.renderExternalUrl) {
     const webhookPath = getWebhookPath();
     await bot.telegram.setWebhook(`${config.renderExternalUrl}${webhookPath}`, {
-      secret_token: config.webhookSecret || undefined,
+      secret_token: getSafeSecretToken(),
     });
     console.log(`[bot] Webhook rejimida ishga tushdi: ${config.renderExternalUrl}${webhookPath}`);
     return { mode: 'webhook', webhookPath };
@@ -102,4 +110,4 @@ async function startBot() {
   return { mode: 'polling' };
 }
 
-module.exports = { bot, startBot, getWebhookPath };
+module.exports = { bot, startBot, getWebhookPath, getSafeSecretToken };

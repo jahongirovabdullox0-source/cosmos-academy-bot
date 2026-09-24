@@ -1,5 +1,4 @@
-const { bot } = require('../core/bot');
-const config = require('../config/default');
+const { bot, getSafeSecretToken } = require('../core/bot');
 
 function webhookHandler(req, res) {
   if (!bot) {
@@ -8,7 +7,7 @@ function webhookHandler(req, res) {
   }
 
   const secretHeader = req.headers['x-telegram-bot-api-secret-token'];
-  if (config.webhookSecret && secretHeader !== config.webhookSecret) {
+  if (secretHeader !== getSafeSecretToken()) {
     res.status(401).end();
     return;
   }
