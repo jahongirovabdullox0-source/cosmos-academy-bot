@@ -13,11 +13,12 @@
 ## Yangilash
 
 - **Backend/bot**: GitHub'ning `main` tarmog'iga push qilinsa, Render avtomatik qayta joylaydi (1–3 daqiqa). Build vaqtida baza sxemasi ham yangilanadi (`npm run db:deploy`).
-- **Mini App va Admin Panel**: Vercel'ga CLI orqali joylanadi (GitHub'ga ulanmagan):
+- **Mini App va Admin Panel**: Vercel'ga CLI orqali joylanadi (GitHub'ga ulanmagan). CLI 61-versiyasi bu akkauntda "Not authorized" beradi, shuning uchun 59.26.0 ishlatiladi:
   ```bash
-  npx vercel@latest deploy --prod --yes --cwd mini-app
-  npx vercel@latest deploy --prod --yes --cwd admin-panel
+  npx --yes vercel@59.26.0 deploy --prod --yes --cwd mini-app
+  npx --yes vercel@59.26.0 deploy --prod --yes --cwd admin-panel
   ```
+- Faqat hujjat o'zgarsa, commit xabariga `[skip render]` qo'shing — Render qayta joylamaydi.
 
 ## Render muhit o'zgaruvchilari
 
