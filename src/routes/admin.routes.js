@@ -1,6 +1,9 @@
 const express = require('express');
 const { adminLoginHandler, adminAuth, blockRemoteIfNotAllowed } = require('../middlewares/auth.middleware');
 const controller = require('../controllers/admin.controller');
+const { uploadImage } = require('../controllers/image.controller');
+
+const rawImageBody = express.raw({ type: ['image/jpeg', 'image/png', 'image/webp'], limit: '8mb' });
 
 const router = express.Router();
 
@@ -35,6 +38,8 @@ router.get('/achievements', controller.listAchievements);
 router.post('/achievements', controller.createAchievement);
 router.patch('/achievements/:id', controller.updateAchievement);
 router.delete('/achievements/:id', controller.deleteAchievement);
+
+router.post('/images', rawImageBody, uploadImage);
 
 router.get('/center-info', controller.getCenterInfo);
 router.put('/center-info', controller.updateCenterInfo);

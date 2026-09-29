@@ -53,6 +53,8 @@ model Course {
   descriptionRu String         @db.Text
   price         Decimal        @db.Decimal(18, 2)
   duration      String?
+  durationEn    String?
+  durationRu    String?
   registrations Registration[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
@@ -114,9 +116,19 @@ model CenterInfo {
   telegram   String?
   facebook   String?
   youtube    String?
-  workHours  String?
-  logoUrl    String?
-  updatedAt  DateTime @updatedAt
+  workHours   String?
+  workHoursEn String?
+  workHoursRu String?
+  logoUrl     String?
+  updatedAt   DateTime @updatedAt
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  mime      String
+  size      Int
+  data      Bytes
+  createdAt DateTime @default(now())
 }
 
 model BroadcastLog {

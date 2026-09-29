@@ -26,7 +26,7 @@ const TITLES = {
   dashboard: 'Boshqaruv paneli',
   registrations: 'Arizalar',
   courses: 'Kurslar',
-  achievements: 'Yutuqlar',
+  achievements: 'Natijalar',
   centerInfo: "Markaz ma'lumotlari",
   users: 'Foydalanuvchilar',
   broadcast: 'Xabar yuborish',

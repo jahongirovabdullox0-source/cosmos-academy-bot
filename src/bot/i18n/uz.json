@@ -5,38 +5,43 @@
     "contact": "📞 Biz bilan bog'lanish",
     "language": "🌐 Tilni o'zgartirish",
     "openApp": "🚀 Mini App'ni ochish",
-    "openAppButton": "🚀 Ochish",
-    "registerButton": "✍️ Ro'yxatdan o'tish"
+    "openAppButton": "🚀 Mini App'ni ochish",
+    "openAppHint": "Mini App'da barcha kurslar, natijalar va ro'yxatdan o'tish bir joyda 👇",
+    "registerButton": "✍️ Ro'yxatdan o'tish",
+    "mockIelts": "📝 Mock IELTS"
   },
   "commands": {
     "start": "Botni ishga tushirish",
-    "til": "Tilni o'zgartirish",
-    "kurslar": "Kurslar ro'yxati",
-    "natijalar": "Markaz yutuqlari",
+    "royxat": "Kursga ro'yxatdan o'tish",
+    "mock": "Mock IELTS'ga yozilish",
+    "kurslar": "Kurslar va narxlar",
+    "natijalar": "Natijalar va sertifikatlar",
     "aloqa": "Aloqa ma'lumotlari",
+    "til": "Tilni o'zgartirish",
     "app": "Mini App'ni ochish"
   },
   "welcome": {
     "chooseLanguage": "🌍 Tilni tanlang\n🌍 Please choose your language\n🌍 Пожалуйста, выберите язык",
-    "greeting": "Assalomu alaykum, {{name}}! 👋\n\n<b>Cosmos Academy</b> — 2019-yildan buyon faoliyat yuritayotgan ingliz tili o'quv markazi botiga xush kelibsiz!\n\nBu yerda siz:\n📚 Kurslar va narxlar bilan tanishasiz\n🏆 Markaz yutuqlarini ko'rasiz\n✍️ Kursga ro'yxatdan o'tasiz\n📞 Biz bilan bog'lanasiz\n\nPastdagi tugmalardan foydalaning yoki to'liq imkoniyatlar uchun Mini App'ni oching 👇",
-    "backAgain": "Yana xush kelibsiz, {{name}}! 👋\n\nQuyidagi tugmalardan foydalaning yoki Mini App'ni oching 👇"
+    "greeting": "Assalomu alaykum, {{name}}! 👋\n\n<b>Cosmos Academy</b> — 2019-yildan buyon faoliyat yuritayotgan ingliz tili o'quv markazi botiga xush kelibsiz!\n\nBu yerda siz:\n✍️ A1 dan C2 gacha, IELTS va CEFR kurslariga yozilasiz\n📝 Har yakshanba bo'ladigan Mock IELTS'ga joy band qilasiz\n📚 Kurslar va narxlar bilan tanishasiz\n🏆 O'quvchilarimiz natijalarini ko'rasiz\n📞 Biz bilan bog'lanasiz\n\nPastdagi tugmalardan foydalaning 👇",
+    "backAgain": "Yana xush kelibsiz, {{name}}! 👋\n\nPastdagi tugmalardan foydalaning 👇"
   },
   "language": {
     "changed": "✅ Til o'zbek tiliga o'zgartirildi",
     "prompt": "🌍 Tilni tanlang:"
   },
   "courses": {
-    "header": "📚 <b>Cosmos Academy kurslari</b>\n",
-    "line": "\n{{icon}} <b>{{title}}</b>\n{{description}}\n💰 Narxi: {{price}} so'm{{duration}}\n",
-    "footer": "\nBatafsil ma'lumot va ro'yxatdan o'tish uchun Mini App'ni oching 👇",
-    "durationSuffix": " / {{duration}}",
+    "header": "📚 <b>Cosmos Academy kurslari</b>",
+    "line": "\n\n{{icon}} <b>{{title}}</b>\n      💰 {{price}} so'm{{duration}}",
+    "durationSuffix": " · {{duration}}",
+    "footer": "\n\nRo'yxatdan o'tish uchun pastdagi tugmani bosing 👇",
     "empty": "Hozircha kurslar ro'yxati yangilanmoqda. Birozdan so'ng qayta urinib ko'ring."
   },
   "results": {
-    "header": "🏆 <b>Cosmos Academy yutuqlari</b>\n",
+    "header": "🏆 <b>Cosmos Academy natijalari</b>\n",
     "line": "\n✅ <b>{{value}}</b> {{title}}",
     "footer": "\n\nBatafsil ma'lumot uchun Mini App'ni oching 👇",
-    "empty": "Hozircha yutuqlar ro'yxati yangilanmoqda."
+    "certificatesTitle": "🎓 O'quvchilarimiz sertifikatlari",
+    "empty": "Hozircha natijalar ro'yxati yangilanmoqda."
   },
   "contact": {
     "header": "📞 <b>Biz bilan bog'lanish</b>\n",
@@ -48,7 +53,24 @@
     "footer": "\n\nBatafsil ma'lumot uchun Mini App'ni oching 👇"
   },
   "fallback": {
-    "text": "Kechirasiz, buni tushunmadim 🙂\n\nQuyidagi tugmalardan foydalaning yoki to'liq imkoniyatlar uchun Mini App'ni oching 👇"
+    "text": "Kechirasiz, buni tushunmadim 🙂\n\nPastdagi tugmalardan foydalaning 👇"
+  },
+  "flow": {
+    "chooseCourse": "✍️ <b>Kursga ro'yxatdan o'tish</b>\n\nQaysi daraja yoki yo'nalishda o'qimoqchisiz? 👇",
+    "askName": "✅ Tanlandi: <b>{{course}}</b>\n\n👤 Ism va familiyangizni yozing:\n<i>Masalan: Aziz Karimov</i>",
+    "askPhone": "📱 Telefon raqamingizni yuboring.\n\nPastdagi <b>«📱 Raqamni yuborish»</b> tugmasini bosing yoki raqamni yozing:\n<i>Masalan: +998 90 123 45 67</i>",
+    "invalidName": "⚠️ Iltimos, ism va familiyangizni to'liq yozing.\n<i>Masalan: Aziz Karimov</i>",
+    "invalidPhone": "⚠️ Telefon raqami noto'g'ri. Iltimos, qaytadan yozing.\n<i>Masalan: +998 90 123 45 67</i>",
+    "pickFromButtons": "👆 Iltimos, yuqoridagi tugmalardan birini tanlang.",
+    "cancelButton": "❌ Bekor qilish",
+    "shareContactButton": "📱 Raqamni yuborish",
+    "cancelled": "Ro'yxatdan o'tish bekor qilindi.",
+    "courseUnavailable": "Kechirasiz, bu kurs hozir mavjud emas.",
+    "blocked": "Kechirasiz, ariza qoldirish imkoniyatingiz cheklangan. Markaz bilan bog'laning."
+  },
+  "mock": {
+    "info": "📝 <b>Mock IELTS</b>\n\n🗓 {{schedule}}\n💰 Narxi: <b>{{price}} so'm</b>\n\n{{description}}\n\nJoyingizni band qilish uchun pastdagi tugmani bosing 👇",
+    "unavailable": "Mock IELTS hozircha mavjud emas. Keyinroq urinib ko'ring."
   },
   "registration": {
     "confirmed": "✅ <b>Arizangiz qabul qilindi!</b>\n\n📚 Kurs: {{course}}\n👤 Ism: {{name}}\n📱 Telefon: {{phone}}\n\nTez orada operatorlarimiz siz bilan bog'lanadi. Rahmat! 🙏"

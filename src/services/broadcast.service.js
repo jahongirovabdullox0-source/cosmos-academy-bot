@@ -1,6 +1,7 @@
 const { prisma } = require('../database/connection');
 const { t, normalizeLang } = require('./i18n.service');
 const { escapeHtml } = require('../utils/format.util');
+const { mainReplyKeyboard } = require('../bot/keyboards');
 
 const BATCH_SIZE = 20;
 const BATCH_DELAY_MS = 1100;
@@ -25,7 +26,8 @@ async function sendToAll(bot, text) {
         const lang = normalizeLang(user.language);
         const message = `${t(lang, 'broadcast.prefix')}${escapeHtml(text)}`;
         try {
-          await bot.telegram.sendMessage(user.telegramId, message, { parse_mode: 'HTML' });
+          // Klaviaturani ham yuboramiz: bot yangilanganda hammaning pastki tugmalari ham yangilanadi.
+          await bot.telegram.sendMessage(user.telegramId, message, { parse_mode: 'HTML', ...mainReplyKeyboard(lang) });
           sentCount += 1;
         } catch (err) {
           failCount += 1;

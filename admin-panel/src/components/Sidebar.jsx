@@ -4,7 +4,7 @@ const NAV_ITEMS = [
   { key: 'dashboard', label: 'Boshqaruv paneli', Icon: GridIcon },
   { key: 'registrations', label: 'Arizalar', Icon: ListIcon },
   { key: 'courses', label: 'Kurslar', Icon: BookIcon },
-  { key: 'achievements', label: 'Yutuqlar', Icon: TrophyIcon },
+  { key: 'achievements', label: 'Natijalar / sertifikatlar', Icon: TrophyIcon },
   { key: 'centerInfo', label: "Markaz ma'lumotlari", Icon: InfoIcon },
   { key: 'users', label: 'Foydalanuvchilar', Icon: UsersIcon },
   { key: 'broadcast', label: 'Xabar yuborish', Icon: MegaphoneIcon },

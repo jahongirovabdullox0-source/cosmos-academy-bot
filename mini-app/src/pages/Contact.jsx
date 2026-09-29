@@ -1,15 +1,16 @@
 import { useApp } from '../context/AppContext';
-import { TopBar } from '../components/TopBar';
-import { PhoneIcon, MapPinIcon, ClockIcon, InstagramIcon, SendIcon } from '../components/Icons';
+import { PageHeader } from '../components/PageHeader';
+import { PhoneIcon, MapPinIcon, ClockIcon, InstagramIcon, SendIcon, ChevronRightIcon } from '../components/Icons';
+import { lf, lplain } from '../utils/localize';
 import { tg } from '../utils/telegram';
 
 export function Contact({ onBack }) {
   const { t, centerInfo, language } = useApp();
-  const langCap = language.charAt(0).toUpperCase() + language.slice(1);
 
   if (!centerInfo) return null;
 
-  const address = centerInfo[`address${langCap}`];
+  const address = lf(centerInfo, 'address', language);
+  const hours = lplain(centerInfo, 'workHours', language);
   const mapUrl =
     centerInfo.latitude && centerInfo.longitude
       ? `https://maps.google.com/?q=${centerInfo.latitude},${centerInfo.longitude}`
@@ -17,7 +18,7 @@ export function Contact({ onBack }) {
 
   return (
     <div>
-      <TopBar title={t('contact.title')} onBack={onBack} />
+      <PageHeader title={t('contact.title')} subtitle={t('contact.subtitle')} onBack={onBack} />
 
       <div className="card">
         {(centerInfo.phones || []).map((phone) => (
@@ -25,10 +26,13 @@ export function Contact({ onBack }) {
             <span className="contact-row__icon">
               <PhoneIcon width={18} height={18} />
             </span>
-            <div>
+            <div className="contact-row__text">
               <div className="contact-row__label">{t('contact.call')}</div>
               <div className="contact-row__value">{phone}</div>
             </div>
+            <span className="contact-row__chevron">
+              <ChevronRightIcon width={16} height={16} />
+            </span>
           </a>
         ))}
 
@@ -41,24 +45,29 @@ export function Contact({ onBack }) {
               tg.openLink(mapUrl);
             }}
           >
-            <span className="contact-row__icon">
+            <span className="contact-row__icon contact-row__icon--gold">
               <MapPinIcon width={18} height={18} />
             </span>
-            <div>
-              <div className="contact-row__label">{t('contact.address')}</div>
+            <div className="contact-row__text">
+              <div className="contact-row__label">
+                {t('contact.address')} · {t('contact.openMap')}
+              </div>
               <div className="contact-row__value">{address}</div>
             </div>
+            <span className="contact-row__chevron">
+              <ChevronRightIcon width={16} height={16} />
+            </span>
           </button>
         )}
 
-        {centerInfo.workHours && (
+        {hours && (
           <div className="contact-row">
-            <span className="contact-row__icon">
+            <span className="contact-row__icon contact-row__icon--green">
               <ClockIcon width={18} height={18} />
             </span>
-            <div>
+            <div className="contact-row__text">
               <div className="contact-row__label">{t('contact.hours')}</div>
-              <div className="contact-row__value">{centerInfo.workHours}</div>
+              <div className="contact-row__value">{hours}</div>
             </div>
           </div>
         )}
@@ -67,29 +76,17 @@ export function Contact({ onBack }) {
       {(centerInfo.instagram || centerInfo.telegram) && (
         <>
           <div className="section-title">{t('contact.social')}</div>
-          <div className="card">
+          <div className="social-grid">
             {centerInfo.instagram && (
-              <button
-                type="button"
-                className="contact-row contact-row--button"
-                onClick={() => tg.openLink(centerInfo.instagram)}
-              >
-                <span className="contact-row__icon">
-                  <InstagramIcon width={18} height={18} />
-                </span>
-                <div className="contact-row__value">Instagram</div>
+              <button type="button" className="social-button social-button--instagram" onClick={() => tg.openLink(centerInfo.instagram)}>
+                <InstagramIcon width={20} height={20} />
+                Instagram
               </button>
             )}
             {centerInfo.telegram && (
-              <button
-                type="button"
-                className="contact-row contact-row--button"
-                onClick={() => tg.openLink(centerInfo.telegram)}
-              >
-                <span className="contact-row__icon">
-                  <SendIcon width={18} height={18} />
-                </span>
-                <div className="contact-row__value">Telegram</div>
+              <button type="button" className="social-button social-button--telegram" onClick={() => tg.openLink(centerInfo.telegram)}>
+                <SendIcon width={20} height={20} />
+                Telegram
               </button>
             )}
           </div>

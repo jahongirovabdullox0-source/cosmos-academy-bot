@@ -5,38 +5,43 @@
     "contact": "📞 Contact us",
     "language": "🌐 Change language",
     "openApp": "🚀 Open Mini App",
-    "openAppButton": "🚀 Open",
-    "registerButton": "✍️ Register"
+    "openAppButton": "🚀 Open Mini App",
+    "openAppHint": "All courses, results and registration in one place — open the Mini App 👇",
+    "registerButton": "✍️ Register",
+    "mockIelts": "📝 Mock IELTS"
   },
   "commands": {
     "start": "Start the bot",
-    "til": "Change language",
-    "kurslar": "List of courses",
-    "natijalar": "Our achievements",
+    "royxat": "Register for a course",
+    "mock": "Sign up for Mock IELTS",
+    "kurslar": "Courses and prices",
+    "natijalar": "Results and certificates",
     "aloqa": "Contact information",
+    "til": "Change language",
     "app": "Open the Mini App"
   },
   "welcome": {
     "chooseLanguage": "🌍 Tilni tanlang\n🌍 Please choose your language\n🌍 Пожалуйста, выберите язык",
-    "greeting": "Hello, {{name}}! 👋\n\nWelcome to the <b>Cosmos Academy</b> bot — an English language center operating since 2019!\n\nHere you can:\n📚 Explore our courses and prices\n🏆 See the center's achievements\n✍️ Register for a course\n📞 Contact us\n\nUse the buttons below or open the Mini App for the full experience 👇",
-    "backAgain": "Welcome back, {{name}}! 👋\n\nUse the buttons below or open the Mini App 👇"
+    "greeting": "Hello, {{name}}! 👋\n\nWelcome to the <b>Cosmos Academy</b> bot — an English language center operating since 2019!\n\nHere you can:\n✍️ Register for A1–C2, IELTS and CEFR courses\n📝 Book a seat at our Mock IELTS held every Sunday\n📚 Explore courses and prices\n🏆 See our students' results\n📞 Contact us\n\nUse the buttons below 👇",
+    "backAgain": "Welcome back, {{name}}! 👋\n\nUse the buttons below 👇"
   },
   "language": {
     "changed": "✅ Language changed to English",
     "prompt": "🌍 Choose a language:"
   },
   "courses": {
-    "header": "📚 <b>Cosmos Academy courses</b>\n",
-    "line": "\n{{icon}} <b>{{title}}</b>\n{{description}}\n💰 Price: {{price}} UZS{{duration}}\n",
-    "footer": "\nOpen the Mini App for details and registration 👇",
-    "durationSuffix": " / {{duration}}",
+    "header": "📚 <b>Cosmos Academy courses</b>",
+    "line": "\n\n{{icon}} <b>{{title}}</b>\n      💰 {{price}} UZS{{duration}}",
+    "durationSuffix": " · {{duration}}",
+    "footer": "\n\nTap the button below to register 👇",
     "empty": "The course list is being updated. Please check back shortly."
   },
   "results": {
-    "header": "🏆 <b>Cosmos Academy achievements</b>\n",
+    "header": "🏆 <b>Cosmos Academy results</b>\n",
     "line": "\n✅ <b>{{value}}</b> {{title}}",
     "footer": "\n\nOpen the Mini App for more details 👇",
-    "empty": "The achievements list is being updated."
+    "certificatesTitle": "🎓 Our students' certificates",
+    "empty": "The results list is being updated."
   },
   "contact": {
     "header": "📞 <b>Contact us</b>\n",
@@ -48,7 +53,24 @@
     "footer": "\n\nOpen the Mini App for more details 👇"
   },
   "fallback": {
-    "text": "Sorry, I didn't understand that 🙂\n\nUse the buttons below or open the Mini App for the full experience 👇"
+    "text": "Sorry, I didn't understand that 🙂\n\nUse the buttons below 👇"
+  },
+  "flow": {
+    "chooseCourse": "✍️ <b>Course registration</b>\n\nWhich level or track would you like to study? 👇",
+    "askName": "✅ Selected: <b>{{course}}</b>\n\n👤 Please type your first and last name:\n<i>For example: Aziz Karimov</i>",
+    "askPhone": "📱 Please send your phone number.\n\nTap <b>«📱 Share my number»</b> below or type the number:\n<i>For example: +998 90 123 45 67</i>",
+    "invalidName": "⚠️ Please type your full first and last name.\n<i>For example: Aziz Karimov</i>",
+    "invalidPhone": "⚠️ That phone number doesn't look right. Please try again.\n<i>For example: +998 90 123 45 67</i>",
+    "pickFromButtons": "👆 Please choose one of the buttons above.",
+    "cancelButton": "❌ Cancel",
+    "shareContactButton": "📱 Share my number",
+    "cancelled": "Registration cancelled.",
+    "courseUnavailable": "Sorry, this course is not available right now.",
+    "blocked": "Sorry, you can't submit applications. Please contact the center."
+  },
+  "mock": {
+    "info": "📝 <b>Mock IELTS</b>\n\n🗓 {{schedule}}\n💰 Price: <b>{{price}} UZS</b>\n\n{{description}}\n\nTap the button below to book your seat 👇",
+    "unavailable": "Mock IELTS is not available right now. Please try again later."
   },
   "registration": {
     "confirmed": "✅ <b>Your application has been received!</b>\n\n📚 Course: {{course}}\n👤 Name: {{name}}\n📱 Phone: {{phone}}\n\nOur team will contact you shortly. Thank you! 🙏"

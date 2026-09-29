@@ -3,6 +3,7 @@ const courseModel = require('../models/course.model');
 const achievementModel = require('../models/achievement.model');
 const centerInfoModel = require('../models/centerInfo.model');
 const registrationModel = require('../models/registration.model');
+const imageModel = require('../models/image.model');
 const statsService = require('../services/stats.service');
 const exportService = require('../services/export.service');
 const broadcastService = require('../services/broadcast.service');
@@ -75,51 +76,65 @@ const listCourses = asyncHandler(async (req, res) => {
   res.json({ success: true, data: serializeDecimals(courses) });
 });
 
-const REQUIRED_COURSE_FIELDS = ['code', 'titleUz', 'titleEn', 'titleRu', 'descriptionUz', 'descriptionEn', 'descriptionRu', 'price'];
+// Faqat o'zbekcha maydonlar majburiy: inglizcha/ruscha bo'sh qolsa, bot va Mini App o'zbekchasini ko'rsatadi.
+const FIELD_LABELS = {
+  code: 'Kod',
+  titleUz: "Nomi (o'zbekcha)",
+  descriptionUz: "Tavsif (o'zbekcha)",
+  price: 'Narx',
+};
 
-function validateCoursePayload(body) {
-  for (const field of REQUIRED_COURSE_FIELDS) {
-    if (body[field] === undefined || body[field] === null || body[field] === '') {
-      throw new ApiError(400, `"${field}" maydoni to'ldirilishi shart`);
+function requireFields(body, fields) {
+  for (const field of fields) {
+    if (body[field] === undefined || body[field] === null || String(body[field]).trim() === '') {
+      throw new ApiError(400, `"${FIELD_LABELS[field] || field}" maydoni to'ldirilishi shart`);
     }
-  }
-  if (Number.isNaN(Number(body.price)) || Number(body.price) < 0) {
-    throw new ApiError(400, "Narx noto'g'ri");
   }
 }
 
+function parsePrice(value) {
+  const price = Number(value);
+  if (Number.isNaN(price) || price < 0) throw new ApiError(400, "Narx noto'g'ri");
+  return price;
+}
+
+const COURSE_TEXT_FIELDS = ['titleEn', 'titleRu', 'descriptionEn', 'descriptionRu'];
+const COURSE_NULLABLE_FIELDS = ['duration', 'durationEn', 'durationRu'];
+
 const createCourse = asyncHandler(async (req, res) => {
-  validateCoursePayload(req.body || {});
-  const { code, order, icon, titleUz, titleEn, titleRu, descriptionUz, descriptionEn, descriptionRu, price, duration, isActive } = req.body;
-  const course = await courseModel.create({
-    code,
-    order: Number(order) || 0,
-    icon: icon || '📘',
-    titleUz,
-    titleEn,
-    titleRu,
-    descriptionUz,
-    descriptionEn,
-    descriptionRu,
-    price: Number(price),
-    duration: duration || null,
-    isActive: isActive === undefined ? true : Boolean(isActive),
-  });
+  const body = req.body || {};
+  requireFields(body, ['code', 'titleUz', 'descriptionUz', 'price']);
+  const data = {
+    code: String(body.code).trim().toUpperCase(),
+    order: Number(body.order) || 0,
+    icon: body.icon || '📘',
+    titleUz: body.titleUz,
+    descriptionUz: body.descriptionUz,
+    price: parsePrice(body.price),
+    isActive: body.isActive === undefined ? true : Boolean(body.isActive),
+  };
+  for (const field of COURSE_TEXT_FIELDS) data[field] = body[field] || '';
+  for (const field of COURSE_NULLABLE_FIELDS) data[field] = body[field] || null;
+  const course = await courseModel.create(data);
   res.json({ success: true, data: serializeDecimals(course) });
 });
 
 const updateCourse = asyncHandler(async (req, res) => {
   const body = req.body || {};
   const data = {};
-  const allowedFields = ['code', 'order', 'icon', 'titleUz', 'titleEn', 'titleRu', 'descriptionUz', 'descriptionEn', 'descriptionRu', 'duration', 'isActive'];
-  for (const field of allowedFields) {
+  for (const field of ['order', 'icon', 'titleUz', 'descriptionUz', 'isActive']) {
     if (body[field] !== undefined) data[field] = body[field];
   }
-  if (body.price !== undefined) {
-    if (Number.isNaN(Number(body.price)) || Number(body.price) < 0) throw new ApiError(400, "Narx noto'g'ri");
-    data.price = Number(body.price);
+  for (const field of COURSE_TEXT_FIELDS) {
+    if (body[field] !== undefined) data[field] = body[field] || '';
   }
-  if (data.order !== undefined) data.order = Number(data.order);
+  for (const field of COURSE_NULLABLE_FIELDS) {
+    if (body[field] !== undefined) data[field] = body[field] || null;
+  }
+  if (data.titleUz !== undefined) requireFields(data, ['titleUz']);
+  if (data.descriptionUz !== undefined) requireFields(data, ['descriptionUz']);
+  if (body.price !== undefined) data.price = parsePrice(body.price);
+  if (data.order !== undefined) data.order = Number(data.order) || 0;
   if (data.isActive !== undefined) data.isActive = Boolean(data.isActive);
 
   const course = await courseModel.update(req.params.id, data);
@@ -138,19 +153,15 @@ const listAchievements = asyncHandler(async (req, res) => {
   res.json({ success: true, data: serializeDecimals(achievements) });
 });
 
-const REQUIRED_ACHIEVEMENT_FIELDS = ['titleUz', 'titleEn', 'titleRu'];
-
 const createAchievement = asyncHandler(async (req, res) => {
   const body = req.body || {};
-  for (const field of REQUIRED_ACHIEVEMENT_FIELDS) {
-    if (!body[field]) throw new ApiError(400, `"${field}" maydoni to'ldirilishi shart`);
-  }
+  requireFields(body, ['titleUz']);
   const achievement = await achievementModel.create({
     order: Number(body.order) || 0,
     value: body.value || null,
     titleUz: body.titleUz,
-    titleEn: body.titleEn,
-    titleRu: body.titleRu,
+    titleEn: body.titleEn || '',
+    titleRu: body.titleRu || '',
     descriptionUz: body.descriptionUz || null,
     descriptionEn: body.descriptionEn || null,
     descriptionRu: body.descriptionRu || null,
@@ -162,20 +173,33 @@ const createAchievement = asyncHandler(async (req, res) => {
 
 const updateAchievement = asyncHandler(async (req, res) => {
   const body = req.body || {};
+  const existing = await achievementModel.findById(req.params.id);
+  if (!existing) throw new ApiError(404, 'Natija topilmadi');
+
   const data = {};
-  const allowedFields = ['order', 'value', 'titleUz', 'titleEn', 'titleRu', 'descriptionUz', 'descriptionEn', 'descriptionRu', 'imageUrl', 'isActive'];
-  for (const field of allowedFields) {
+  for (const field of ['order', 'value', 'titleUz', 'isActive']) {
     if (body[field] !== undefined) data[field] = body[field];
   }
-  if (data.order !== undefined) data.order = Number(data.order);
+  for (const field of ['titleEn', 'titleRu']) {
+    if (body[field] !== undefined) data[field] = body[field] || '';
+  }
+  for (const field of ['descriptionUz', 'descriptionEn', 'descriptionRu', 'imageUrl']) {
+    if (body[field] !== undefined) data[field] = body[field] || null;
+  }
+  if (data.titleUz !== undefined) requireFields(data, ['titleUz']);
+  if (data.order !== undefined) data.order = Number(data.order) || 0;
   if (data.isActive !== undefined) data.isActive = Boolean(data.isActive);
 
   const achievement = await achievementModel.update(req.params.id, data);
+  if (data.imageUrl !== undefined && existing.imageUrl && existing.imageUrl !== data.imageUrl) {
+    await imageModel.removeByUrl(existing.imageUrl);
+  }
   res.json({ success: true, data: serializeDecimals(achievement) });
 });
 
 const deleteAchievement = asyncHandler(async (req, res) => {
-  await achievementModel.remove(req.params.id);
+  const removed = await achievementModel.remove(req.params.id);
+  if (removed.imageUrl) await imageModel.removeByUrl(removed.imageUrl);
   res.json({ success: true });
 });
 
@@ -194,7 +218,7 @@ const updateCenterInfo = asyncHandler(async (req, res) => {
     'phones', 'addressUz', 'addressEn', 'addressRu',
     'latitude', 'longitude',
     'instagram', 'telegram', 'facebook', 'youtube',
-    'workHours', 'logoUrl',
+    'workHours', 'workHoursEn', 'workHoursRu', 'logoUrl',
   ];
   const data = {};
   for (const field of allowedFields) {
@@ -203,8 +227,15 @@ const updateCenterInfo = asyncHandler(async (req, res) => {
   if (data.phones !== undefined && !Array.isArray(data.phones)) {
     data.phones = String(data.phones).split(',').map((p) => p.trim()).filter(Boolean);
   }
-  if (data.latitude !== undefined) data.latitude = data.latitude === null ? null : Number(data.latitude);
-  if (data.longitude !== undefined) data.longitude = data.longitude === null ? null : Number(data.longitude);
+  for (const field of ['latitude', 'longitude']) {
+    if (data[field] === undefined) continue;
+    if (data[field] === null || data[field] === '') {
+      data[field] = null;
+    } else {
+      data[field] = Number(String(data[field]).replace(',', '.'));
+      if (Number.isNaN(data[field])) throw new ApiError(400, "Koordinata noto'g'ri (masalan: 40.6219)");
+    }
+  }
 
   const info = await centerInfoModel.update(data);
   res.json({ success: true, data: serializeDecimals(info) });

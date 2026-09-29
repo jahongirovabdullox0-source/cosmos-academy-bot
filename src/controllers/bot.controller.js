@@ -12,9 +12,11 @@ function webhookHandler(req, res) {
     return;
   }
 
-  bot.handleUpdate(req.body, res).catch((err) => {
+  // Telegram'ga darhol 200 qaytaramiz: sekin javoblarda (masalan, sertifikat rasmlari)
+  // Telegram so'rovni kutib qolmaydi va xabarni qayta yubormaydi (ikki marta javob bo'lmaydi).
+  res.status(200).end();
+  bot.handleUpdate(req.body).catch((err) => {
     console.error('[bot] Webhook update xatosi:', err);
-    if (!res.headersSent) res.status(200).end();
   });
 }
 

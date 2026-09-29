@@ -4,6 +4,7 @@ import { useAdmin } from '../context/AdminContext';
 import { Pagination } from '../components/Pagination';
 import { Modal, ConfirmDialog } from '../components/Modal';
 import { EditIcon, TrashIcon, DownloadIcon, SearchIcon } from '../components/Icons';
+import { formatPhone } from '../utils/format';
 
 const STATUS_OPTIONS = [
   { value: '', label: 'Barcha holatlar' },
@@ -31,6 +32,8 @@ export function Registrations() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
+  const [courseId, setCourseId] = useState('');
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [deleting, setDeleting] = useState(null);
@@ -39,7 +42,7 @@ export function Registrations() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await adminApi.getRegistrations({ page, pageSize, search, status });
+      const data = await adminApi.getRegistrations({ page, pageSize, search, status, courseId });
       setItems(data.items);
       setTotal(data.total);
     } catch (err) {
@@ -47,15 +50,22 @@ export function Registrations() {
     } finally {
       setLoading(false);
     }
-  }, [page, search, status, showToast]);
+  }, [page, search, status, courseId, showToast]);
 
   useEffect(() => {
     load();
   }, [load]);
 
   useEffect(() => {
+    adminApi
+      .getCourses()
+      .then(setCourses)
+      .catch(() => setCourses([]));
+  }, []);
+
+  useEffect(() => {
     setPage(1);
-  }, [search, status]);
+  }, [search, status, courseId]);
 
   async function handleQuickStatus(id, newStatus) {
     try {
@@ -132,6 +142,14 @@ export function Registrations() {
           />
           <SearchIcon width={16} height={16} style={{ position: 'absolute', left: 12, top: 12, color: 'var(--ca-text-muted)' }} />
         </div>
+        <select className="select" value={courseId} onChange={(e) => setCourseId(e.target.value)}>
+          <option value="">Barcha kurslar</option>
+          {courses.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.icon} {c.titleUz}
+            </option>
+          ))}
+        </select>
         <select className="select" value={status} onChange={(e) => setStatus(e.target.value)}>
           {STATUS_OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>
@@ -161,9 +179,22 @@ export function Registrations() {
             <tbody>
               {items.map((r) => (
                 <tr key={r.id}>
-                  <td>{r.fullName}</td>
-                  <td>{r.phone}</td>
-                  <td>{r.course?.titleUz}</td>
+                  <td>
+                    <div style={{ fontWeight: 600 }}>{r.fullName}</div>
+                    {r.user?.username && (
+                      <a className="subtle-link" href={`https://t.me/${r.user.username}`} target="_blank" rel="noreferrer">
+                        @{r.user.username}
+                      </a>
+                    )}
+                  </td>
+                  <td>
+                    <a className="phone-link" href={`tel:${r.phone}`}>
+                      {formatPhone(r.phone)}
+                    </a>
+                  </td>
+                  <td>
+                    {r.course?.icon} {r.course?.titleUz}
+                  </td>
                   <td>
                     <select
                       className="select"

@@ -8,7 +8,8 @@
     "cancel": "Bekor qilish",
     "close": "Yopish",
     "somUnit": "so'm",
-    "empty": "Hozircha ma'lumot yo'q"
+    "empty": "Hozircha ma'lumot yo'q",
+    "wakingServer": "Server uyg'onmoqda, biroz kuting..."
   },
   "nav": {
     "home": "Bosh sahifa",
@@ -19,7 +20,7 @@
   "onboarding": {
     "slide1Title": "Cosmos Academyga xush kelibsiz",
     "slide1Text": "2019-yildan buyon sifatli ingliz tili ta'limi beramiz",
-    "slide2Title": "A1 dan IELTS gacha",
+    "slide2Title": "A1 dan C2 gacha, IELTS va CEFR",
     "slide2Text": "Har qanday darajadagi o'quvchi uchun mos kurs topamiz",
     "slide3Title": "Natijalarga birga erishamiz",
     "slide3Text": "500 dan ortiq bitiruvchimiz muvaffaqiyatga erishgan",
@@ -28,13 +29,18 @@
   "home": {
     "greeting": "Assalomu alaykum, {{name}}! 👋",
     "tagline": "Ingliz tilini biz bilan o'rganing",
+    "registerCta": "Ro'yxatdan o'tish",
     "coursesCta": "Kurslarni ko'rish",
     "resultsCta": "Natijalarimiz",
-    "contactCta": "Biz bilan bog'lanish",
-    "aboutTitle": "Markaz haqida"
+    "contactCta": "Aloqa",
+    "aboutTitle": "Markaz haqida",
+    "mockEyebrow": "Mock IELTS",
+    "mockTitle": "Haqiqiy imtihon sharoitida o'zingizni sinang",
+    "mockCta": "Joy band qilish"
   },
   "courses": {
     "title": "Kurslar",
+    "subtitle": "Darajangizga mos kursni tanlang",
     "priceLabel": "Narxi",
     "durationLabel": "Davomiyligi",
     "registerButton": "Ro'yxatdan o'tish",
@@ -43,25 +49,35 @@
   },
   "register": {
     "title": "Ro'yxatdan o'tish",
+    "subtitle": "Yo'nalishni tanlang va ma'lumotlaringizni qoldiring — operatorlarimiz o'zlari bog'lanadi",
+    "chooseLevel": "Daraja yoki yo'nalish",
     "courseLabel": "Kurs",
-    "nameLabel": "Ism va familiya",
-    "namePlaceholder": "Ism Familiya",
+    "firstNameLabel": "Ism",
+    "firstNamePlaceholder": "Aziz",
+    "lastNameLabel": "Familiya",
+    "lastNamePlaceholder": "Karimov",
     "phoneLabel": "Telefon raqami",
     "phonePlaceholder": "+998 90 123 45 67",
-    "submit": "Yuborish",
+    "submit": "Ariza yuborish",
     "submitting": "Yuborilmoqda...",
     "success": "Arizangiz qabul qilindi!",
     "successText": "Tez orada operatorlarimiz siz bilan bog'lanadi.",
-    "errorName": "Ismingizni kiriting (kamida 2 harf)",
+    "errorFirstName": "Ismingizni kiriting",
+    "errorLastName": "Familiyangizni kiriting",
     "errorPhone": "Telefon raqamini to'g'ri kiriting",
+    "errorCourse": "Daraja yoki yo'nalishni tanlang",
     "done": "Tushunarli"
   },
   "results": {
     "title": "Bizning natijalarimiz",
+    "subtitle": "O'quvchilarimiz yutuqlari va sertifikatlari",
+    "statsTitle": "Raqamlarda",
+    "certificatesTitle": "Sertifikatlar",
     "empty": "Hozircha ma'lumot yo'q"
   },
   "contact": {
     "title": "Biz bilan bog'lanish",
+    "subtitle": "Savollaringiz bo'lsa, bemalol murojaat qiling",
     "phones": "Telefon raqamlari",
     "address": "Manzil",
     "hours": "Ish vaqti",
@@ -71,6 +87,7 @@
   },
   "profile": {
     "title": "Profil",
+    "subtitle": "Til sozlamasi va arizalaringiz",
     "language": "Til",
     "myRegistrations": "Mening arizalarim",
     "noRegistrations": "Sizda hali arizalar yo'q",

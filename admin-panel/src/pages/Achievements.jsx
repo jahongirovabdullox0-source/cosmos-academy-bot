@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
-import { adminApi } from '../api/client';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { adminApi, resolveAssetUrl } from '../api/client';
 import { useAdmin } from '../context/AdminContext';
 import { Modal, ConfirmDialog } from '../components/Modal';
 import { PlusIcon, EditIcon, TrashIcon } from '../components/Icons';
+import { compressImage } from '../utils/format';
 
 const EMPTY_ACHIEVEMENT = {
   order: 0,
@@ -84,11 +85,13 @@ export function Achievements() {
     <div>
       <div className="page-header">
         <div>
-          <div className="page-header__title">Yutuqlar</div>
-          <div className="page-header__subtitle">Markazning natijalari va yutuqlari (Mini App'da ko'rinadi)</div>
+          <div className="page-header__title">Natijalar va sertifikatlar</div>
+          <div className="page-header__subtitle">
+            Rasmsiz yozuvlar raqamlar sifatida, rasmlilar esa "Sertifikatlar" bo'limida ko'rinadi (bot va Mini App'da)
+          </div>
         </div>
         <button type="button" className="btn btn-primary" onClick={() => setEditing({ ...EMPTY_ACHIEVEMENT })}>
-          <PlusIcon width={16} height={16} /> Yangi yutuq
+          <PlusIcon width={16} height={16} /> Yangi qo'shish
         </button>
       </div>
 
@@ -96,11 +99,12 @@ export function Achievements() {
         {loading ? (
           <div className="skeleton" style={{ height: 200, margin: 16 }} />
         ) : items.length === 0 ? (
-          <div className="table-empty">Hozircha yutuqlar yo'q</div>
+          <div className="table-empty">Hozircha natijalar yo'q</div>
         ) : (
           <table>
             <thead>
               <tr>
+                <th>Rasm</th>
                 <th>Qiymat</th>
                 <th>Nomi</th>
                 <th>Holati</th>
@@ -110,6 +114,13 @@ export function Achievements() {
             <tbody>
               {items.map((item) => (
                 <tr key={item.id}>
+                  <td>
+                    {item.imageUrl ? (
+                      <img className="thumb" src={resolveAssetUrl(item.imageUrl)} alt="" loading="lazy" />
+                    ) : (
+                      <span className="muted">—</span>
+                    )}
+                  </td>
                   <td style={{ fontWeight: 700, color: 'var(--ca-blue)' }}>{item.value}</td>
                   <td>{item.titleUz}</td>
                   <td>
@@ -143,8 +154,8 @@ export function Achievements() {
 
       {deleting && (
         <ConfirmDialog
-          title="Yutuqni o'chirish"
-          message={`"${deleting.titleUz}" yutug'ini butunlay o'chirmoqchimisiz?`}
+          title="O'chirish"
+          message={`"${deleting.titleUz}" yozuvini (rasmi bilan birga) butunlay o'chirmoqchimisiz?`}
           danger
           onCancel={() => setDeleting(null)}
           onConfirm={handleDelete}
@@ -155,23 +166,71 @@ export function Achievements() {
 }
 
 function AchievementForm({ item, onSave, onCancel }) {
+  const { showToast } = useAdmin();
   const [form, setForm] = useState(item);
   const [lang, setLang] = useState('Uz');
+  const [uploading, setUploading] = useState(false);
+  const fileInput = useRef(null);
 
   function set(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
   }
 
+  async function handleFile(e) {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    setUploading(true);
+    try {
+      const blob = await compressImage(file);
+      const { url } = await adminApi.uploadImage(blob);
+      set('imageUrl', url);
+      showToast('Rasm yuklandi — saqlashni unutmang');
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      setUploading(false);
+    }
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
+    if (!form.titleUz || !form.titleUz.trim()) {
+      setLang('Uz');
+      showToast("O'zbekcha nomini kiriting", 'error');
+      return;
+    }
     onSave({ ...form, order: Number(form.order) || 0 });
   }
 
   return (
-    <Modal title={item.id ? 'Yutuqni tahrirlash' : 'Yangi yutuq'} onClose={onCancel}>
+    <Modal title={item.id ? 'Tahrirlash' : "Yangi natija yoki sertifikat"} onClose={onCancel}>
       <form onSubmit={handleSubmit}>
         <div className="field">
-          <label className="field__label">Qiymat (masalan "500+", "2019", "7.0+")</label>
+          <label className="field__label">Sertifikat rasmi (ixtiyoriy)</label>
+          <div className="image-upload">
+            {form.imageUrl ? (
+              <img className="image-upload__preview" src={resolveAssetUrl(form.imageUrl)} alt="" />
+            ) : (
+              <div className="image-upload__empty">Rasm tanlanmagan</div>
+            )}
+            <div className="image-upload__actions">
+              <button type="button" className="btn btn-outline btn-sm" onClick={() => fileInput.current.click()} disabled={uploading}>
+                {uploading ? 'Yuklanmoqda...' : form.imageUrl ? 'Boshqa rasm' : 'Rasm yuklash'}
+              </button>
+              {form.imageUrl && !uploading && (
+                <button type="button" className="btn btn-danger btn-sm" onClick={() => set('imageUrl', '')}>
+                  Olib tashlash
+                </button>
+              )}
+            </div>
+            <input ref={fileInput} type="file" accept="image/*" hidden onChange={handleFile} />
+          </div>
+          <div className="field__hint">Rasm avtomatik kichraytiriladi. Rasmli yozuvlar "Sertifikatlar" bo'limida chiqadi.</div>
+        </div>
+
+        <div className="field">
+          <label className="field__label">Qiymat (masalan "IELTS 7.5", "500+", "2019")</label>
           <input className="input" style={{ width: '100%' }} value={form.value || ''} onChange={(e) => set('value', e.target.value)} />
         </div>
 
@@ -189,13 +248,15 @@ function AchievementForm({ item, onSave, onCancel }) {
         </div>
 
         <div className="field">
-          <label className="field__label">Sarlavha ({lang})</label>
+          <label className="field__label">
+            Nomi ({lang}){lang === 'Uz' ? ' *' : ''}
+          </label>
           <input
             className="input"
             style={{ width: '100%' }}
-            value={form[`title${lang}`]}
+            value={form[`title${lang}`] || ''}
             onChange={(e) => set(`title${lang}`, e.target.value)}
-            required={lang === 'Uz'}
+            placeholder={lang === 'Uz' ? "Masalan: Aziz Karimov yoki bitiruvchi" : "Bo'sh qolsa, o'zbekchasi ko'rsatiladi"}
           />
         </div>
         <div className="field">
@@ -208,22 +269,16 @@ function AchievementForm({ item, onSave, onCancel }) {
           />
         </div>
 
-        <div className="form-row">
-          <div className="field">
-            <label className="field__label">Rasm URL (ixtiyoriy)</label>
-            <input className="input" style={{ width: '100%' }} value={form.imageUrl || ''} onChange={(e) => set('imageUrl', e.target.value)} />
-          </div>
-          <div className="field">
-            <label className="field__label">Tartib raqami</label>
-            <input type="number" className="input" style={{ width: '100%' }} value={form.order} onChange={(e) => set('order', e.target.value)} />
-          </div>
+        <div className="field">
+          <label className="field__label">Tartib raqami (kichigi oldinda)</label>
+          <input type="number" className="input" style={{ width: '100%' }} value={form.order} onChange={(e) => set('order', e.target.value)} />
         </div>
 
         <div className="modal__actions">
           <button type="button" className="btn btn-outline" onClick={onCancel}>
             Bekor qilish
           </button>
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary" disabled={uploading}>
             Saqlash
           </button>
         </div>

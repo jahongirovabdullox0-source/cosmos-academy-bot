@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { api } from '../api/client';
 import { initials, formatMoney } from '../utils/format';
+import { lf } from '../utils/localize';
 import { Skeleton } from '../components/Skeleton';
 import { EmptyState } from '../components/EmptyState';
+import { PageHeader } from '../components/PageHeader';
 import { tg } from '../utils/telegram';
 
 const LANGS = [
-  { code: 'uz', label: "🇺🇿 O'zbekcha" },
-  { code: 'en', label: '🇬🇧 English' },
-  { code: 'ru', label: '🇷🇺 Русский' },
+  { code: 'uz', flag: '🇺🇿', label: "O'zbekcha" },
+  { code: 'en', flag: '🇬🇧', label: 'English' },
+  { code: 'ru', flag: '🇷🇺', label: 'Русский' },
 ];
 
 const STATUS_CLASS = {
@@ -21,7 +23,6 @@ const STATUS_CLASS = {
 
 export function Profile() {
   const { t, user, language, changeLanguage, centerInfo } = useApp();
-  const langCap = language.charAt(0).toUpperCase() + language.slice(1);
   const [registrations, setRegistrations] = useState(null);
 
   useEffect(() => {
@@ -33,17 +34,17 @@ export function Profile() {
 
   return (
     <div>
-      <h1 className="page-heading">{t('profile.title')}</h1>
-
-      <div className="card" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <div className="avatar">{initials(user?.firstName, user?.lastName)}</div>
-        <div>
-          <div style={{ fontWeight: 700, fontSize: 16 }}>
-            {user?.firstName} {user?.lastName}
+      <PageHeader title={t('profile.title')} subtitle={t('profile.subtitle')}>
+        <div className="profile-card">
+          <div className="avatar">{initials(user?.firstName, user?.lastName)}</div>
+          <div className="profile-card__text">
+            <div className="profile-card__name">
+              {user?.firstName} {user?.lastName}
+            </div>
+            {user?.username && <div className="profile-card__username">@{user.username}</div>}
           </div>
-          {user?.username && <div className="muted" style={{ fontSize: 13 }}>@{user.username}</div>}
         </div>
-      </div>
+      </PageHeader>
 
       <div className="section-title">{t('profile.language')}</div>
       <div className="lang-list">
@@ -57,7 +58,9 @@ export function Profile() {
               changeLanguage(l.code);
             }}
           >
-            {l.label}
+            <span className="lang-option__flag">{l.flag}</span>
+            <span className="lang-option__label">{l.label}</span>
+            {language === l.code && <span className="lang-option__check">✓</span>}
           </button>
         ))}
       </div>
@@ -67,26 +70,23 @@ export function Profile() {
       {registrations && registrations.length === 0 && <EmptyState icon="📝" title={t('profile.noRegistrations')} />}
       {registrations &&
         registrations.map((r) => (
-          <div className="card" key={r.id} style={{ marginBottom: 10 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: 14.5 }}>{r.course?.[`title${langCap}`]}</div>
-                <div className="muted" style={{ fontSize: 12.5, marginTop: 3 }}>
-                  {formatMoney(r.course?.price)} {t('common.somUnit')}
-                </div>
+          <div className="registration-card" key={r.id}>
+            <div className="registration-card__icon">{r.course?.icon}</div>
+            <div className="registration-card__body">
+              <div className="registration-card__title">{lf(r.course, 'title', language)}</div>
+              <div className="registration-card__meta">
+                {formatMoney(r.course?.price)} {t('common.somUnit')}
               </div>
-              <span className={`badge ${STATUS_CLASS[r.status] || 'badge-new'}`}>{t(`profile.status${r.status}`)}</span>
             </div>
+            <span className={`badge ${STATUS_CLASS[r.status] || 'badge-new'}`}>{t(`profile.status${r.status}`)}</span>
           </div>
         ))}
 
       {centerInfo && (
         <>
           <div className="section-title">{t('profile.about')}</div>
-          <div className="card">
-            <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: 'var(--ca-text-muted)' }}>
-              {centerInfo[`about${langCap}`]}
-            </p>
+          <div className="card card--accent">
+            <p className="about-text">{lf(centerInfo, 'about', language)}</p>
           </div>
         </>
       )}

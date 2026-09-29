@@ -8,7 +8,8 @@
     "cancel": "Cancel",
     "close": "Close",
     "somUnit": "UZS",
-    "empty": "No information yet"
+    "empty": "No information yet",
+    "wakingServer": "Waking up the server, please wait..."
   },
   "nav": {
     "home": "Home",
@@ -19,7 +20,7 @@
   "onboarding": {
     "slide1Title": "Welcome to Cosmos Academy",
     "slide1Text": "Providing quality English education since 2019",
-    "slide2Title": "From A1 to IELTS",
+    "slide2Title": "A1 to C2, IELTS and CEFR",
     "slide2Text": "We have the right course for every level",
     "slide3Title": "Let's achieve results together",
     "slide3Text": "Over 500 of our graduates have succeeded",
@@ -28,13 +29,18 @@
   "home": {
     "greeting": "Hello, {{name}}! 👋",
     "tagline": "Learn English with us",
+    "registerCta": "Register",
     "coursesCta": "View courses",
     "resultsCta": "Our results",
-    "contactCta": "Contact us",
-    "aboutTitle": "About the center"
+    "contactCta": "Contact",
+    "aboutTitle": "About the center",
+    "mockEyebrow": "Mock IELTS",
+    "mockTitle": "Test yourself under real exam conditions",
+    "mockCta": "Book a seat"
   },
   "courses": {
     "title": "Courses",
+    "subtitle": "Choose the course that fits your level",
     "priceLabel": "Price",
     "durationLabel": "Duration",
     "registerButton": "Register",
@@ -43,25 +49,35 @@
   },
   "register": {
     "title": "Registration",
+    "subtitle": "Choose a track and leave your details — our team will contact you",
+    "chooseLevel": "Level or track",
     "courseLabel": "Course",
-    "nameLabel": "Full name",
-    "namePlaceholder": "First Last",
+    "firstNameLabel": "First name",
+    "firstNamePlaceholder": "Aziz",
+    "lastNameLabel": "Last name",
+    "lastNamePlaceholder": "Karimov",
     "phoneLabel": "Phone number",
     "phonePlaceholder": "+998 90 123 45 67",
-    "submit": "Submit",
-    "submitting": "Submitting...",
+    "submit": "Send application",
+    "submitting": "Sending...",
     "success": "Your application has been received!",
     "successText": "Our team will contact you shortly.",
-    "errorName": "Please enter your name (at least 2 letters)",
+    "errorFirstName": "Please enter your first name",
+    "errorLastName": "Please enter your last name",
     "errorPhone": "Please enter a valid phone number",
+    "errorCourse": "Please choose a level or track",
     "done": "Got it"
   },
   "results": {
     "title": "Our results",
+    "subtitle": "Our students' achievements and certificates",
+    "statsTitle": "In numbers",
+    "certificatesTitle": "Certificates",
     "empty": "No information yet"
   },
   "contact": {
     "title": "Contact us",
+    "subtitle": "Have a question? Reach out anytime",
     "phones": "Phone numbers",
     "address": "Address",
     "hours": "Working hours",
@@ -71,6 +87,7 @@
   },
   "profile": {
     "title": "Profile",
+    "subtitle": "Language and your applications",
     "language": "Language",
     "myRegistrations": "My applications",
     "noRegistrations": "You have no applications yet",

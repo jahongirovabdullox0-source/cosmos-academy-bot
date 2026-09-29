@@ -7,7 +7,7 @@ async function get() {
   const cached = cache.get(CACHE_KEY);
   if (cached) return cached;
   const info = await prisma.centerInfo.findUnique({ where: { id: 1 } });
-  if (info) cache.set(CACHE_KEY, info, 10 * 60_000);
+  if (info) cache.set(CACHE_KEY, info, 30 * 60_000);
   return info;
 }
 

@@ -6,8 +6,9 @@ const { startHandler } = require('../bot/handlers/start.handler');
 const { languageCallbackHandler, languageButtonHandler } = require('../bot/handlers/language.handler');
 const { coursesHandler, resultsHandler, contactHandler, openAppHandler } = require('../bot/handlers/menu.handler');
 const { fallbackTextHandler } = require('../bot/handlers/text.handler');
+const registration = require('../bot/handlers/registration.handler');
 
-const COMMAND_KEYS = ['start', 'til', 'kurslar', 'natijalar', 'aloqa', 'app'];
+const COMMAND_KEYS = ['start', 'royxat', 'mock', 'kurslar', 'natijalar', 'aloqa', 'til', 'app'];
 
 if (!config.botToken) {
   console.warn('[bot] OGOHLANTIRISH: BOT_TOKEN topilmadi — bot ishga tushirilmaydi. .env faylini to\'ldiring.');
@@ -23,6 +24,8 @@ function labelsFor(key) {
 
 if (bot) {
   bot.command('start', startHandler);
+  bot.command('royxat', registration.registerStartHandler);
+  bot.command('mock', registration.mockIeltsHandler);
   bot.command('til', languageButtonHandler);
   bot.command('kurslar', coursesHandler);
   bot.command('natijalar', resultsHandler);
@@ -30,14 +33,21 @@ if (bot) {
   bot.command('app', openAppHandler);
 
   bot.action(['lang_uz', 'lang_en', 'lang_ru'], languageCallbackHandler);
+  bot.action('reg_start', registration.registerStartHandler);
+  bot.action('reg_cancel', registration.cancelHandler);
+  bot.action(/^reg_c_(\d+)$/, registration.courseSelectedHandler);
 
+  bot.hears(labelsFor('flow.cancelButton'), registration.cancelHandler);
+  bot.hears(labelsFor('menu.registerButton'), registration.registerStartHandler);
+  bot.hears(labelsFor('menu.mockIelts'), registration.mockIeltsHandler);
   bot.hears(labelsFor('menu.courses'), coursesHandler);
   bot.hears(labelsFor('menu.results'), resultsHandler);
   bot.hears(labelsFor('menu.contact'), contactHandler);
   bot.hears(labelsFor('menu.language'), languageButtonHandler);
   bot.hears(labelsFor('menu.openApp'), openAppHandler);
 
-  bot.on('text', fallbackTextHandler);
+  bot.on('contact', registration.contactHandler);
+  bot.on('text', registration.flowTextHandler, fallbackTextHandler);
 
   bot.catch((err, ctx) => {
     console.error(`[bot] Xatolik (update ${ctx.update?.update_id}):`, err);
@@ -82,10 +92,9 @@ function getSafeSecretToken() {
 async function startBot() {
   if (!bot) return { mode: 'disabled' };
 
-  await setupCommands();
-  await setupMenuButton();
-
   if (config.renderExternalUrl) {
+    await setupCommands();
+    await setupMenuButton();
     const webhookPath = getWebhookPath();
     await bot.telegram.setWebhook(`${config.renderExternalUrl}${webhookPath}`, {
       secret_token: getSafeSecretToken(),
@@ -94,11 +103,15 @@ async function startBot() {
     return { mode: 'webhook', webhookPath };
   }
 
+  // Serverda webhook yoqilgan bo'lsa, lokal nusxa botning buyruqlari/menyusiga ham tegmaydi.
   const info = await bot.telegram.getWebhookInfo();
   if (info.url) {
     console.log(`[bot] Diqqat: serverda webhook faol (${info.url}). Lokal bot polling rejimida ISHGA TUSHIRILMAYDI, ikkilanish oldini olish uchun.`);
     return { mode: 'remote-webhook-active' };
   }
+
+  await setupCommands();
+  await setupMenuButton();
 
   // Diqqat: bot.launch() bot to'xtatilmaguncha promise'ni yakunlamaydi (Telegraf'ning
   // atayin qilingan xatti-harakati) — shuning uchun uni "await" qilmaymiz, aks holda

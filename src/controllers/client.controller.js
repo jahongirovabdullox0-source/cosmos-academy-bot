@@ -4,8 +4,8 @@ const achievementModel = require('../models/achievement.model');
 const centerInfoModel = require('../models/centerInfo.model');
 const registrationModel = require('../models/registration.model');
 const { asyncHandler, ApiError } = require('../utils/http.util');
-const { serializeDecimals, escapeHtml } = require('../utils/format.util');
-const { normalizeLang, t } = require('../services/i18n.service');
+const { serializeDecimals, escapeHtml, cleanName, isValidFullName, normalizePhone } = require('../utils/format.util');
+const { normalizeLang, t, localizedField } = require('../services/i18n.service');
 const { bot } = require('../core/bot');
 
 const getMe = asyncHandler(async (req, res) => {
@@ -41,43 +41,42 @@ const getCenterInfo = asyncHandler(async (req, res) => {
 const register = asyncHandler(async (req, res) => {
   const { courseId, fullName, phone } = req.body || {};
   if (!courseId || !fullName || !phone) {
-    throw new ApiError(400, "Kurs, ism va telefon raqami kiritilishi shart");
+    throw new ApiError(400, "Kurs, ism-familiya va telefon raqami kiritilishi shart");
   }
-  if (String(fullName).trim().length < 2) {
-    throw new ApiError(400, 'Ism juda qisqa');
+  const name = cleanName(fullName);
+  if (!isValidFullName(name)) {
+    throw new ApiError(400, "Ism va familiyani to'liq kiriting");
   }
-  const phoneDigits = String(phone).replace(/[^\d+]/g, '');
-  if (phoneDigits.replace(/\D/g, '').length < 9) {
+  const normalizedPhone = normalizePhone(phone);
+  if (!normalizedPhone) {
     throw new ApiError(400, "Telefon raqami noto'g'ri");
   }
 
-  const course = await courseModel.findById(courseId);
+  const [course, { user }] = await Promise.all([
+    courseModel.findById(courseId),
+    userModel.findOrCreateFromTelegram(req.telegramUser),
+  ]);
   if (!course || !course.isActive) {
     throw new ApiError(404, 'Kurs topilmadi');
   }
+  if (user.isBlocked) {
+    throw new ApiError(403, "Ariza qoldirish imkoniyatingiz cheklangan. Markaz bilan bog'laning.");
+  }
 
-  const { user } = await userModel.findOrCreateFromTelegram(req.telegramUser);
-  await userModel.setPhone(user.telegramId, phoneDigits);
-
-  const registration = await registrationModel.create({
-    userId: user.id,
-    courseId: course.id,
-    fullName: String(fullName).trim(),
-    phone: phoneDigits,
-  });
+  const [registration] = await Promise.all([
+    registrationModel.create({ userId: user.id, courseId: course.id, fullName: name, phone: normalizedPhone }),
+    userModel.setPhone(user.telegramId, normalizedPhone),
+  ]);
 
   const lang = normalizeLang(user.language);
-  const langCap = lang.charAt(0).toUpperCase() + lang.slice(1);
-  const courseTitle = course[`title${langCap}`];
-
   if (bot) {
     bot.telegram
       .sendMessage(
         user.telegramId,
         t(lang, 'registration.confirmed', {
-          course: escapeHtml(courseTitle),
-          name: escapeHtml(registration.fullName),
-          phone: escapeHtml(phoneDigits),
+          course: escapeHtml(localizedField(course, 'title', lang)),
+          name: escapeHtml(name),
+          phone: escapeHtml(normalizedPhone),
         }),
         { parse_mode: 'HTML' }
       )

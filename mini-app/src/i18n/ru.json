@@ -8,7 +8,8 @@
     "cancel": "Отмена",
     "close": "Закрыть",
     "somUnit": "сум",
-    "empty": "Пока нет информации"
+    "empty": "Пока нет информации",
+    "wakingServer": "Сервер просыпается, подождите немного..."
   },
   "nav": {
     "home": "Главная",
@@ -19,7 +20,7 @@
   "onboarding": {
     "slide1Title": "Добро пожаловать в Cosmos Academy",
     "slide1Text": "Качественное образование по английскому языку с 2019 года",
-    "slide2Title": "От A1 до IELTS",
+    "slide2Title": "От A1 до C2, IELTS и CEFR",
     "slide2Text": "Подберём подходящий курс для любого уровня",
     "slide3Title": "Достигнем результатов вместе",
     "slide3Text": "Более 500 наших выпускников добились успеха",
@@ -28,13 +29,18 @@
   "home": {
     "greeting": "Здравствуйте, {{name}}! 👋",
     "tagline": "Изучайте английский с нами",
+    "registerCta": "Записаться",
     "coursesCta": "Смотреть курсы",
     "resultsCta": "Наши результаты",
-    "contactCta": "Связаться с нами",
-    "aboutTitle": "О центре"
+    "contactCta": "Контакты",
+    "aboutTitle": "О центре",
+    "mockEyebrow": "Mock IELTS",
+    "mockTitle": "Проверьте себя в условиях настоящего экзамена",
+    "mockCta": "Забронировать"
   },
   "courses": {
     "title": "Курсы",
+    "subtitle": "Выберите курс под свой уровень",
     "priceLabel": "Цена",
     "durationLabel": "Продолжительность",
     "registerButton": "Записаться",
@@ -43,25 +49,35 @@
   },
   "register": {
     "title": "Запись на курс",
+    "subtitle": "Выберите направление и оставьте данные — наши операторы свяжутся с вами",
+    "chooseLevel": "Уровень или направление",
     "courseLabel": "Курс",
-    "nameLabel": "Имя и фамилия",
-    "namePlaceholder": "Имя Фамилия",
+    "firstNameLabel": "Имя",
+    "firstNamePlaceholder": "Азиз",
+    "lastNameLabel": "Фамилия",
+    "lastNamePlaceholder": "Каримов",
     "phoneLabel": "Номер телефона",
     "phonePlaceholder": "+998 90 123 45 67",
-    "submit": "Отправить",
+    "submit": "Отправить заявку",
     "submitting": "Отправка...",
     "success": "Ваша заявка принята!",
     "successText": "Наши операторы скоро свяжутся с вами.",
-    "errorName": "Введите имя (минимум 2 буквы)",
+    "errorFirstName": "Введите имя",
+    "errorLastName": "Введите фамилию",
     "errorPhone": "Введите корректный номер телефона",
+    "errorCourse": "Выберите уровень или направление",
     "done": "Понятно"
   },
   "results": {
     "title": "Наши результаты",
+    "subtitle": "Достижения и сертификаты наших студентов",
+    "statsTitle": "В цифрах",
+    "certificatesTitle": "Сертификаты",
     "empty": "Пока нет информации"
   },
   "contact": {
     "title": "Связаться с нами",
+    "subtitle": "Есть вопросы? Пишите и звоните",
     "phones": "Номера телефонов",
     "address": "Адрес",
     "hours": "Часы работы",
@@ -71,6 +87,7 @@
   },
   "profile": {
     "title": "Профиль",
+    "subtitle": "Язык и ваши заявки",
     "language": "Язык",
     "myRegistrations": "Мои заявки",
     "noRegistrations": "У вас пока нет заявок",

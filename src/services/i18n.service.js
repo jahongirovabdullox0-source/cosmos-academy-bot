@@ -21,4 +21,19 @@ function normalizeLang(lang) {
   return ['uz', 'en', 'ru'].includes(lang) ? lang : 'uz';
 }
 
-module.exports = { t, normalizeLang, dictionaries };
+// titleEn bo'sh bo'lsa titleUz ko'rsatiladi (admin faqat o'zbekchani to'ldirgan bo'lishi mumkin).
+function localizedField(entity, field, lang) {
+  if (!entity) return '';
+  const cap = lang.charAt(0).toUpperCase() + lang.slice(1);
+  return entity[`${field}${cap}`] || entity[`${field}Uz`] || '';
+}
+
+// duration / workHours: o'zbekcha qiymat asosiy ustunda, tarjimalar En/Ru ustunlarida.
+function localizedPlain(entity, field, lang) {
+  if (!entity) return '';
+  if (lang === 'en') return entity[`${field}En`] || entity[field] || '';
+  if (lang === 'ru') return entity[`${field}Ru`] || entity[field] || '';
+  return entity[field] || '';
+}
+
+module.exports = { t, normalizeLang, dictionaries, localizedField, localizedPlain };

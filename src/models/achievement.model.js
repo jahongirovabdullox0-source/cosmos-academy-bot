@@ -8,7 +8,7 @@ async function listActive() {
   const cached = cache.get(ACTIVE_KEY);
   if (cached) return cached;
   const items = await prisma.achievement.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } });
-  cache.set(ACTIVE_KEY, items, 5 * 60_000);
+  cache.set(ACTIVE_KEY, items, 30 * 60_000);
   return items;
 }
 

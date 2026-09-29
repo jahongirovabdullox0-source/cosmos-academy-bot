@@ -18,6 +18,8 @@ const EMPTY_COURSE = {
   descriptionRu: '',
   price: '',
   duration: '',
+  durationEn: '',
+  durationRu: '',
 };
 
 const LANGS = [
@@ -165,6 +167,7 @@ export function Courses() {
 }
 
 function CourseForm({ course, onSave, onCancel }) {
+  const { showToast } = useAdmin();
   const [form, setForm] = useState(course);
   const [lang, setLang] = useState('Uz');
 
@@ -172,8 +175,16 @@ function CourseForm({ course, onSave, onCancel }) {
     setForm((f) => ({ ...f, [field]: value }));
   }
 
+  const durationField = lang === 'Uz' ? 'duration' : `duration${lang}`;
+  const optionalHint = lang === 'Uz' ? '' : "Bo'sh qolsa, o'zbekchasi ko'rsatiladi";
+
   function handleSubmit(e) {
     e.preventDefault();
+    if (!form.titleUz?.trim() || !form.descriptionUz?.trim()) {
+      setLang('Uz');
+      showToast("O'zbekcha nom va tavsifni to'ldiring", 'error');
+      return;
+    }
     onSave({ ...form, price: Number(form.price), order: Number(form.order) || 0 });
   }
 
@@ -212,43 +223,51 @@ function CourseForm({ course, onSave, onCancel }) {
         </div>
 
         <div className="field">
-          <label className="field__label">Nomi ({lang})</label>
+          <label className="field__label">
+            Nomi ({lang}){lang === 'Uz' ? ' *' : ''}
+          </label>
           <input
             className="input"
             style={{ width: '100%' }}
-            value={form[`title${lang}`]}
+            value={form[`title${lang}`] || ''}
             onChange={(e) => set(`title${lang}`, e.target.value)}
-            required={lang === 'Uz'}
+            placeholder={optionalHint}
           />
         </div>
         <div className="field">
-          <label className="field__label">Tavsif ({lang})</label>
+          <label className="field__label">
+            Tavsif ({lang}){lang === 'Uz' ? ' *' : ''}
+          </label>
           <textarea
             className="input"
             style={{ width: '100%', minHeight: 80 }}
-            value={form[`description${lang}`]}
+            value={form[`description${lang}`] || ''}
             onChange={(e) => set(`description${lang}`, e.target.value)}
-            required={lang === 'Uz'}
+            placeholder={optionalHint}
+          />
+        </div>
+        <div className="field">
+          <label className="field__label">Davomiyligi / jadvali ({lang})</label>
+          <input
+            className="input"
+            style={{ width: '100%' }}
+            value={form[durationField] || ''}
+            onChange={(e) => set(durationField, e.target.value)}
+            placeholder={{ Uz: '2 oy yoki Har yakshanba', En: '2 months', Ru: '2 месяца' }[lang]}
           />
         </div>
 
-        <div className="form-row">
-          <div className="field">
-            <label className="field__label">Narxi (so'm)</label>
-            <input
-              type="number"
-              min="0"
-              className="input"
-              style={{ width: '100%' }}
-              value={form.price}
-              onChange={(e) => set('price', e.target.value)}
-              required
-            />
-          </div>
-          <div className="field">
-            <label className="field__label">Davomiyligi (masalan "2 oy")</label>
-            <input className="input" style={{ width: '100%' }} value={form.duration || ''} onChange={(e) => set('duration', e.target.value)} />
-          </div>
+        <div className="field">
+          <label className="field__label">Narxi (so'm) *</label>
+          <input
+            type="number"
+            min="0"
+            className="input"
+            style={{ width: '100%' }}
+            value={form.price}
+            onChange={(e) => set('price', e.target.value)}
+            required
+          />
         </div>
 
         <div className="form-row">

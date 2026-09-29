@@ -1,9 +1,10 @@
 const { Markup } = require('telegraf');
-const { t } = require('../services/i18n.service');
+const { t, localizedField } = require('../services/i18n.service');
 const config = require('../config/default');
 
 function mainReplyKeyboard(lang) {
   return Markup.keyboard([
+    [t(lang, 'menu.registerButton'), t(lang, 'menu.mockIelts')],
     [t(lang, 'menu.courses'), t(lang, 'menu.results')],
     [t(lang, 'menu.contact'), t(lang, 'menu.language')],
     [t(lang, 'menu.openApp')],
@@ -18,16 +19,62 @@ function languageInlineKeyboard() {
   ]);
 }
 
-function openAppInlineKeyboard(lang, path = '') {
-  // Telegram web_app VA oddiy url tugmalari ham localhost/HTTP manzillarni rad etadi
-  // (butun xabar yuborilmay qoladi). Lokalda (ngrok'siz) tugmasiz, faqat matn yuboramiz;
-  // WEBAPP_URL haqiqiy HTTPS (ngrok yoki production) bo'lganda tugma qo'shiladi.
-  if (!config.webappUrl.startsWith('https://')) {
-    return {};
-  }
-  const url = `${config.webappUrl}${path}`;
-  const label = t(lang, 'menu.openAppButton');
-  return Markup.inlineKeyboard([[Markup.button.webApp(label, url)]]);
+// Telegram web_app va url tugmalari localhost/HTTP manzillarni rad etadi (butun xabar yuborilmaydi),
+// shuning uchun Mini App tugmasi faqat haqiqiy HTTPS manzil (ngrok yoki production) bo'lganda qo'shiladi.
+function webAppButton(lang, path = '') {
+  if (!config.webappUrl.startsWith('https://')) return null;
+  return Markup.button.webApp(t(lang, 'menu.openAppButton'), `${config.webappUrl}${path}`);
 }
 
-module.exports = { mainReplyKeyboard, languageInlineKeyboard, openAppInlineKeyboard };
+function openAppInlineKeyboard(lang, path = '') {
+  const button = webAppButton(lang, path);
+  return button ? Markup.inlineKeyboard([[button]]) : {};
+}
+
+function coursesListKeyboard(lang) {
+  const row = [Markup.button.callback(t(lang, 'menu.registerButton'), 'reg_start')];
+  const appButton = webAppButton(lang, '#/courses');
+  return Markup.inlineKeyboard(appButton ? [row, [appButton]] : [row]);
+}
+
+// "A1 — Boshlang'ich daraja" -> "A1": ikki ustunli tugmalarda qisqa nom sig'adi.
+function shortTitle(course, lang) {
+  return localizedField(course, 'title', lang).split(' — ')[0].trim();
+}
+
+function courseChoiceKeyboard(courses, lang) {
+  const buttons = courses.map((c) => Markup.button.callback(`${c.icon} ${shortTitle(c, lang)}`, `reg_c_${c.id}`));
+  const rows = [];
+  for (let i = 0; i < buttons.length; i += 2) rows.push(buttons.slice(i, i + 2));
+  rows.push([Markup.button.callback(t(lang, 'flow.cancelButton'), 'reg_cancel')]);
+  return Markup.inlineKeyboard(rows);
+}
+
+function registerCourseKeyboard(lang, courseId) {
+  return Markup.inlineKeyboard([[Markup.button.callback(t(lang, 'menu.registerButton'), `reg_c_${courseId}`)]]);
+}
+
+function nameStepKeyboard(lang, suggestion) {
+  const rows = [];
+  if (suggestion) rows.push([suggestion]);
+  rows.push([t(lang, 'flow.cancelButton')]);
+  return Markup.keyboard(rows).resize();
+}
+
+function phoneStepKeyboard(lang) {
+  return Markup.keyboard([
+    [Markup.button.contactRequest(t(lang, 'flow.shareContactButton'))],
+    [t(lang, 'flow.cancelButton')],
+  ]).resize();
+}
+
+module.exports = {
+  mainReplyKeyboard,
+  languageInlineKeyboard,
+  openAppInlineKeyboard,
+  coursesListKeyboard,
+  courseChoiceKeyboard,
+  registerCourseKeyboard,
+  nameStepKeyboard,
+  phoneStepKeyboard,
+};

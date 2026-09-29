@@ -4,6 +4,12 @@
 // Productionda (Vercel) VITE_API_URL Render backend manziliga o'rnatiladi.
 const BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
+// Admin yuklagan rasmlar "/api/images/..." ko'rinishida keladi — backend manzilini qo'shamiz.
+export function resolveAssetUrl(url) {
+  if (!url) return '';
+  return url.startsWith('/api/') ? `${BASE_URL}${url}` : url;
+}
+
 function getInitData() {
   return window.Telegram?.WebApp?.initData || '';
 }

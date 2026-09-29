@@ -9,7 +9,7 @@ async function listActive() {
   const cached = cache.get(ACTIVE_KEY);
   if (cached) return cached;
   const courses = await prisma.course.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } });
-  cache.set(ACTIVE_KEY, courses, 5 * 60_000);
+  cache.set(ACTIVE_KEY, courses, 30 * 60_000);
   return courses;
 }
 

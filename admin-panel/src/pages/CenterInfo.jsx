@@ -25,9 +25,14 @@ export function CenterInfo() {
 
   if (!form) return <div className="skeleton" style={{ height: 300 }} />;
 
+  const workHoursField = lang === 'Uz' ? 'workHours' : `workHours${lang}`;
+
   function set(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
   }
+
+  // Koordinatani serverga matn holida yuboramiz: server "40,62" ni ham tushunadi va noto'g'ri bo'lsa xabar beradi.
+  const coordinate = (value) => (value === '' || value === null || value === undefined ? null : String(value).trim());
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -36,8 +41,8 @@ export function CenterInfo() {
       const payload = {
         ...form,
         phones: form.phones.split(',').map((p) => p.trim()).filter(Boolean),
-        latitude: form.latitude === '' || form.latitude === null || form.latitude === undefined ? null : Number(form.latitude),
-        longitude: form.longitude === '' || form.longitude === null || form.longitude === undefined ? null : Number(form.longitude),
+        latitude: coordinate(form.latitude),
+        longitude: coordinate(form.longitude),
       };
       await adminApi.updateCenterInfo(payload);
       showToast('Saqlandi');
@@ -100,6 +105,16 @@ export function CenterInfo() {
                 onChange={(e) => set(`address${lang}`, e.target.value)}
               />
             </div>
+            <div className="field">
+              <label className="field__label">Ish vaqti ({lang})</label>
+              <input
+                className="input"
+                style={{ width: '100%' }}
+                value={form[workHoursField] || ''}
+                onChange={(e) => set(workHoursField, e.target.value)}
+                placeholder={{ Uz: 'Dushanba—Shanba: 08:00—17:00', En: 'Monday—Saturday: 08:00—17:00', Ru: 'Понедельник—Суббота: 08:00—17:00' }[lang]}
+              />
+            </div>
           </div>
 
           <div className="card">
@@ -117,16 +132,28 @@ export function CenterInfo() {
             <div className="form-row">
               <div className="field">
                 <label className="field__label">Kenglik (latitude)</label>
-                <input className="input" style={{ width: '100%' }} value={form.latitude ?? ''} onChange={(e) => set('latitude', e.target.value)} />
+                <input
+                  className="input"
+                  style={{ width: '100%' }}
+                  value={form.latitude ?? ''}
+                  onChange={(e) => set('latitude', e.target.value)}
+                  placeholder="40.6219"
+                />
               </div>
               <div className="field">
                 <label className="field__label">Uzunlik (longitude)</label>
-                <input className="input" style={{ width: '100%' }} value={form.longitude ?? ''} onChange={(e) => set('longitude', e.target.value)} />
+                <input
+                  className="input"
+                  style={{ width: '100%' }}
+                  value={form.longitude ?? ''}
+                  onChange={(e) => set('longitude', e.target.value)}
+                  placeholder="72.5098"
+                />
               </div>
             </div>
-            <div className="field">
-              <label className="field__label">Ish vaqti</label>
-              <input className="input" style={{ width: '100%' }} value={form.workHours || ''} onChange={(e) => set('workHours', e.target.value)} />
+            <div className="field__hint" style={{ marginTop: -6, marginBottom: 14 }}>
+              Aniq nuqta uchun: Google Maps'da markaz binosini bosib turing — chiqqan ikki raqamni shu yerga yozing. Bo'sh qolsa,
+              xarita manzil bo'yicha qidiradi.
             </div>
             <div className="field">
               <label className="field__label">Instagram havolasi</label>

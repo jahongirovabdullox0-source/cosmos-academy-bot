@@ -54,6 +54,12 @@ async function request(path, options = {}) {
   return json.data;
 }
 
+// Serverda saqlangan rasmlar "/api/images/..." ko'rinishida keladi — backend manzilini qo'shamiz.
+export function resolveAssetUrl(url) {
+  if (!url) return '';
+  return url.startsWith('/api/') ? `${BASE_URL}${url}` : url;
+}
+
 function qs(params = {}) {
   const clean = Object.fromEntries(Object.entries(params).filter(([, v]) => v !== '' && v !== undefined && v !== null));
   return new URLSearchParams(clean).toString();
@@ -87,6 +93,9 @@ export const adminApi = {
 
   getCenterInfo: () => request('/center-info'),
   updateCenterInfo: (data) => request('/center-info', { method: 'PUT', body: JSON.stringify(data) }),
+
+  // Rasm xom (binary) holda yuboriladi — JSON'ga aylantirilmaydi.
+  uploadImage: (blob) => request('/images', { method: 'POST', body: blob, headers: { 'Content-Type': blob.type } }),
 
   sendBroadcast: (text) => request('/broadcast', { method: 'POST', body: JSON.stringify({ text }) }),
   getBroadcastHistory: () => request('/broadcast/history'),

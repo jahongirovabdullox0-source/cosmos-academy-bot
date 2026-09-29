@@ -1,6 +1,13 @@
 # Cosmos Academy — Telegram bot, Mini App va Admin Panel
 
-"Cosmos Academy" ingliz tili o'quv markazi uchun Telegram bot, Mini App (mobil ilova) va Admin Panel.
+"Cosmos Academy" ingliz tili o'quv markazi uchun Telegram bot, Mini App va Admin Panel.
+
+| Qism | Manzil |
+|---|---|
+| Bot | https://t.me/CA_uzb_bot |
+| Mini App | https://cosmos-academy-app.vercel.app |
+| Admin Panel | https://cosmos-academy-admin.vercel.app |
+| Backend (API) | https://cosmos-academy-api.onrender.com |
 
 ## Tuzilma
 
@@ -15,14 +22,24 @@ scripts/dev.js  — Barcha qismlarni bitta buyruq bilan ishga tushiradi
 ## Imkoniyatlar
 
 - **3 tilda** (o'zbek, ingliz, rus) — foydalanuvchi tilni tanlaydi, bot va Mini App shu tilda ishlaydi
-- Kurslar ro'yxati, narxlari va ro'yxatdan o'tish (A1, A2, CEFR Multilevel, IELTS Foundation, Mock IELTS)
-- Markaz yutuqlari/natijalari
-- Aloqa ma'lumotlari (telefon, manzil, ijtimoiy tarmoqlar)
-- Admin panel: arizalarni boshqarish, kurslarni tahrirlash, yutuqlarni tahrirlash, markaz ma'lumotlarini tahrirlash, foydalanuvchilarni ko'rish, hammaga xabar yuborish, Excel eksport
+- **Botda ro'yxatdan o'tish** (`✍️ Ro'yxatdan o'tish`, `/royxat`): A1–C2, CEFR, IELTS dan birini tanlash → ism-familiya → telefon (bir bosishda yuborish mumkin)
+- **Mock IELTS** (`📝 Mock IELTS`, `/mock`): har yakshanba, CD format, 80 000 so'm — alohida ariza
+- Kurslar ro'yxati va narxlari, markaz natijalari va **sertifikat rasmlari**, aloqa ma'lumotlari
+- Mini App'da ham xuddi shu: ro'yxatdan o'tish (daraja tanlash bilan), Mock IELTS banneri, sertifikatlar galereyasi
+- Admin panel: arizalar (kurs bo'yicha filtr, bir bosishda qo'ng'iroq), kurslar, natijalar va sertifikat rasmlari, markaz ma'lumotlari, foydalanuvchilar, hammaga xabar, Excel eksport
+
+## Admin panelda nimalarni o'zgartirish mumkin
+
+- **Arizalar**: holatini o'zgartirish (Yangi/Bog'lanildi/Tasdiqlandi/Bekor qilindi), izoh, kurs bo'yicha filtr, Excel'ga yuklab olish
+- **Kurslar**: nomi, tavsifi, davomiyligi (3 tilda — inglizcha/ruscha bo'sh qolsa o'zbekchasi ko'rinadi), narxi, holati, tartibi
+- **Natijalar / sertifikatlar**: raqamlar (masalan "500+ bitiruvchi") va sertifikat rasmlari — rasm yuklansa "Sertifikatlar" bo'limida chiqadi
+- **Markaz ma'lumotlari**: telefonlar, manzil, ish vaqti (3 tilda), xaritadagi nuqta, ijtimoiy tarmoqlar
+- **Foydalanuvchilar**: ko'rish, bloklash (bloklangan odam ariza qoldira olmaydi)
+- **Xabar yuborish**: barcha foydalanuvchilarga bir vaqtda xabar
 
 ## Lokalda ishga tushirish
 
-1. `.env` faylida `BOT_TOKEN` va `DATABASE_URL`/`DIRECT_URL` to'ldirilgan bo'lishi kerak.
+1. `.env` faylida `BOT_TOKEN`, `DATABASE_URL`, `DIRECT_URL` to'ldirilgan bo'lishi kerak.
 2. Birinchi marta:
    ```bash
    npm install
@@ -31,21 +48,8 @@ scripts/dev.js  — Barcha qismlarni bitta buyruq bilan ishga tushiradi
    npm run db:push
    npm run db:seed
    ```
-3. Keyinchalik, har safar ishga tushirish uchun `start.bat` faylini ikki marta bosing (yoki `npm run dev`).
-4. Ochiladigan manzillar:
-   - Backend/API: http://localhost:4000
-   - Mini App: http://localhost:5173
-   - Admin Panel: http://localhost:5174 (parol `.env` dagi `ADMIN_PASSWORD`)
+3. Keyinchalik `start.bat` ni ikki marta bosing (yoki `npm run dev`).
 
-Telefonda haqiqiy Telegram orqali sinash uchun: `node scripts/dev.js --tunnel` (ngrok kerak).
+Diqqat: lokal server production bilan **bitta bazani** ishlatadi. Serverda webhook yoqilgan bo'lsa, lokal bot xabarlarni qabul qilmaydi (ikkilanmaslik uchun).
 
-## Admin panelda nimalarni o'zgartirish mumkin
-
-- **Kurslar**: nomi (3 tilda), tavsifi (3 tilda), narxi, davomiyligi, holati (faol/faol emas), tartib raqami
-- **Yutuqlar**: qiymati (masalan "500+"), sarlavhasi (3 tilda), tavsifi, rasm havolasi
-- **Markaz ma'lumotlari**: nomi, markaz haqida matn, telefon raqamlari, manzil, ish vaqti, ijtimoiy tarmoq havolalari
-- **Arizalar**: holatini o'zgartirish (Yangi/Bog'lanildi/Tasdiqlandi/Bekor qilindi), izoh qo'shish, Excel'ga yuklab olish
-- **Foydalanuvchilar**: ko'rish, bloklash/blokdan chiqarish
-- **Xabar yuborish**: barcha foydalanuvchilarga bir vaqtda xabar
-
-Joylashtirish (production'ga chiqarish) bo'yicha ko'rsatmalar `DEPLOY.md` faylida.
+Joylashtirish va yangilash bo'yicha ko'rsatmalar — `DEPLOY.md`.

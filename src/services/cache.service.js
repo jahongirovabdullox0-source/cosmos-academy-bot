@@ -24,4 +24,11 @@ function clear(prefix) {
   }
 }
 
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, entry] of store) {
+    if (now > entry.expiresAt) store.delete(key);
+  }
+}, 10 * 60_000).unref();
+
 module.exports = { get, set, clear };
