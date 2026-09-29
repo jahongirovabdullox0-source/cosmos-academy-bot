@@ -75,6 +75,8 @@ export const adminApi = {
   getDashboardStats: () => request('/dashboard/stats'),
 
   getRegistrations: (params) => request(`/registrations?${qs(params)}`),
+  getRegistrationSummary: (params) => request(`/registrations/summary?${qs(params)}`),
+  registrationsExportUrl: (params) => `${BASE_URL}/api/admin/registrations/export?${qs(params)}`,
   updateRegistration: (id, data) => request(`/registrations/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   deleteRegistration: (id) => request(`/registrations/${id}`, { method: 'DELETE' }),
 

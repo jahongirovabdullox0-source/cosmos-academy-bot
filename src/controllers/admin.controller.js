@@ -20,16 +20,30 @@ const getDashboardStats = asyncHandler(async (req, res) => {
 
 // ---------------- Registrations ----------------
 
+const REGISTRATION_STATUSES = ['NEW', 'CONTACTED', 'CONFIRMED', 'CANCELLED'];
+
+function parseRegistrationFilters(query) {
+  const { search = '', status = '', courseId = '', date = '' } = query;
+  if (status && !REGISTRATION_STATUSES.includes(status)) throw new ApiError(400, "Holat noto'g'ri");
+  if (courseId && !/^\d+$/.test(courseId)) throw new ApiError(400, "Kurs noto'g'ri");
+  if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new ApiError(400, "Sana noto'g'ri (YYYY-MM-DD)");
+  return { search: String(search).trim(), status, courseId, date };
+}
+
 const listRegistrations = asyncHandler(async (req, res) => {
-  const { page = 1, pageSize = 20, search = '', status = '', courseId = '' } = req.query;
+  const { page = 1, pageSize = 20 } = req.query;
   const result = await registrationModel.list({
-    page: Number(page),
-    pageSize: Number(pageSize),
-    search,
-    status,
-    courseId,
+    page: Number(page) || 1,
+    pageSize: Math.min(Number(pageSize) || 20, 100),
+    ...parseRegistrationFilters(req.query),
   });
   res.json({ success: true, data: serializeDecimals(result) });
+});
+
+const registrationsSummary = asyncHandler(async (req, res) => {
+  const { status, courseId } = parseRegistrationFilters(req.query);
+  const counts = await registrationModel.dayCounts({ status, courseId });
+  res.json({ success: true, data: counts });
 });
 
 const updateRegistration = asyncHandler(async (req, res) => {
@@ -47,11 +61,14 @@ const deleteRegistration = asyncHandler(async (req, res) => {
   res.json({ success: true });
 });
 
+// Excel ekranda tanlangan filtrlar (kun, kurs, holat) bo'yicha yuklanadi.
 const exportRegistrations = asyncHandler(async (req, res) => {
-  const registrations = await registrationModel.listAllForExport();
+  const filters = parseRegistrationFilters(req.query);
+  const registrations = await registrationModel.listAllForExport(filters);
   const buffer = await exportService.buildRegistrationsWorkbook(registrations);
+  const filename = filters.date ? `arizalar-${filters.date}.xlsx` : 'arizalar.xlsx';
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  res.setHeader('Content-Disposition', 'attachment; filename="arizalar.xlsx"');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
   res.send(buffer);
 });
 
@@ -263,6 +280,7 @@ const getBroadcastHistory = asyncHandler(async (req, res) => {
 module.exports = {
   getDashboardStats,
   listRegistrations,
+  registrationsSummary,
   updateRegistration,
   deleteRegistration,
   exportRegistrations,

@@ -1,5 +1,32 @@
 const { prisma } = require('../database/connection');
-const { daysAgoUtc, startOfTodayUtc } = require('../utils/date.util');
+const {
+  daysAgoUtc,
+  startOfTodayUtc,
+  tashkentDateString,
+  shiftDateString,
+  tashkentDayRange,
+} = require('../utils/date.util');
+
+function buildWhere({ search = '', status = '', courseId = '', date = '' } = {}) {
+  const conditions = [];
+  if (search) {
+    const or = [
+      { fullName: { contains: search, mode: 'insensitive' } },
+      { phone: { contains: search } },
+    ];
+    // Telefonlar "+998901234567" ko'rinishida saqlanadi — "90 123 45" kabi qidiruv ham topsin.
+    const digits = search.replace(/\D/g, '');
+    if (digits.length >= 3) or.push({ phone: { contains: digits } });
+    conditions.push({ OR: or });
+  }
+  if (status) conditions.push({ status });
+  if (courseId) conditions.push({ courseId: Number(courseId) });
+  if (date) {
+    const { start, end } = tashkentDayRange(date);
+    conditions.push({ createdAt: { gte: start, lt: end } });
+  }
+  return { AND: conditions };
+}
 
 async function create({ userId, courseId, fullName, phone }) {
   return prisma.registration.create({
@@ -16,21 +43,8 @@ async function listForUser(userId) {
   });
 }
 
-async function list({ page = 1, pageSize = 20, search = '', status = '', courseId = '' } = {}) {
-  const where = {
-    AND: [
-      search
-        ? {
-            OR: [
-              { fullName: { contains: search, mode: 'insensitive' } },
-              { phone: { contains: search, mode: 'insensitive' } },
-            ],
-          }
-        : {},
-      status ? { status } : {},
-      courseId ? { courseId: Number(courseId) } : {},
-    ],
-  };
+async function list({ page = 1, pageSize = 20, ...filters } = {}) {
+  const where = buildWhere(filters);
   const [items, total] = await Promise.all([
     prisma.registration.findMany({
       where,
@@ -44,11 +58,26 @@ async function list({ page = 1, pageSize = 20, search = '', status = '', courseI
   return { items, total };
 }
 
-async function listAllForExport() {
+async function listAllForExport(filters = {}) {
   return prisma.registration.findMany({
+    where: buildWhere(filters),
     orderBy: { createdAt: 'desc' },
     include: { course: true, user: true },
   });
+}
+
+// Bugun va kecha nechta ariza tushgani (kurs/holat filtrlari hisobga olinadi).
+async function dayCounts({ status = '', courseId = '' } = {}) {
+  const today = tashkentDateString();
+  const yesterday = shiftDateString(today, -1);
+  const [todayCount, yesterdayCount] = await Promise.all([
+    prisma.registration.count({ where: buildWhere({ status, courseId, date: today }) }),
+    prisma.registration.count({ where: buildWhere({ status, courseId, date: yesterday }) }),
+  ]);
+  return {
+    today: { date: today, count: todayCount },
+    yesterday: { date: yesterday, count: yesterdayCount },
+  };
 }
 
 async function findById(id) {
@@ -112,6 +141,7 @@ module.exports = {
   listForUser,
   list,
   listAllForExport,
+  dayCounts,
   findById,
   updateStatus,
   remove,

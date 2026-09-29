@@ -6,6 +6,28 @@ export function formatMoney(value) {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 }
 
+// O'zbekistonda yozgi vaqt yo'q — Toshkent doim UTC+5.
+const TASHKENT_OFFSET_MS = 5 * 60 * 60 * 1000;
+const pad = (n) => String(n).padStart(2, '0');
+
+// "2026-09-29" -> "29.09.2026"
+export function formatDay(ymd) {
+  if (!ymd) return '';
+  const [y, m, d] = ymd.split('-');
+  return `${d}.${m}.${y}`;
+}
+
+// ISO sana -> Toshkent vaqti bo'yicha "29.09.2026 11:40"
+export function formatDateTime(iso) {
+  const t = new Date(new Date(iso).getTime() + TASHKENT_OFFSET_MS);
+  return `${pad(t.getUTCDate())}.${pad(t.getUTCMonth() + 1)}.${t.getUTCFullYear()} ${pad(t.getUTCHours())}:${pad(t.getUTCMinutes())}`;
+}
+
+// ISO sana -> "29.09.2026"
+export function formatDate(iso) {
+  return formatDateTime(iso).slice(0, 10);
+}
+
 // "+998901234567" -> "+998 90 123 45 67"
 export function formatPhone(phone) {
   const match = /^\+998(\d{2})(\d{3})(\d{2})(\d{2})$/.exec(phone || '');

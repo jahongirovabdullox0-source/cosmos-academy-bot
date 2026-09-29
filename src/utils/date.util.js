@@ -36,4 +36,32 @@ function daysAgoUtc(days) {
   return d;
 }
 
-module.exports = { TZ, formatDateTime, formatDate, startOfTodayUtc, daysAgoUtc };
+// O'zbekistonda yozgi vaqt yo'q — Toshkent doim UTC+5.
+const TASHKENT_OFFSET_MS = 5 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+// Toshkent bo'yicha bugungi sana: "2026-09-29"
+function tashkentDateString(date = new Date()) {
+  return new Date(date.getTime() + TASHKENT_OFFSET_MS).toISOString().slice(0, 10);
+}
+
+function shiftDateString(dateStr, days) {
+  return new Date(Date.parse(`${dateStr}T00:00:00Z`) + days * DAY_MS).toISOString().slice(0, 10);
+}
+
+// "2026-09-29" -> Toshkent bo'yicha shu kunning UTC oralig'i [start, end)
+function tashkentDayRange(dateStr) {
+  const start = new Date(Date.parse(`${dateStr}T00:00:00Z`) - TASHKENT_OFFSET_MS);
+  return { start, end: new Date(start.getTime() + DAY_MS) };
+}
+
+module.exports = {
+  TZ,
+  formatDateTime,
+  formatDate,
+  startOfTodayUtc,
+  daysAgoUtc,
+  tashkentDateString,
+  shiftDateString,
+  tashkentDayRange,
+};

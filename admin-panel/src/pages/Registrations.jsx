@@ -3,8 +3,8 @@ import { adminApi } from '../api/client';
 import { useAdmin } from '../context/AdminContext';
 import { Pagination } from '../components/Pagination';
 import { Modal, ConfirmDialog } from '../components/Modal';
-import { EditIcon, TrashIcon, DownloadIcon, SearchIcon } from '../components/Icons';
-import { formatPhone } from '../utils/format';
+import { EditIcon, TrashIcon, DownloadIcon, SearchIcon, CloseIcon } from '../components/Icons';
+import { formatPhone, formatDay, formatDateTime } from '../utils/format';
 
 const STATUS_OPTIONS = [
   { value: '', label: 'Barcha holatlar' },
@@ -14,17 +14,6 @@ const STATUS_OPTIONS = [
   { value: 'CANCELLED', label: 'Bekor qilindi' },
 ];
 
-function formatDate(iso) {
-  return new Date(iso).toLocaleString('uz-UZ', {
-    timeZone: 'Asia/Tashkent',
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
-
 export function Registrations() {
   const { showToast } = useAdmin();
   const [items, setItems] = useState([]);
@@ -33,6 +22,8 @@ export function Registrations() {
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
   const [courseId, setCourseId] = useState('');
+  const [date, setDate] = useState('');
+  const [summary, setSummary] = useState(null);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
@@ -42,7 +33,7 @@ export function Registrations() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await adminApi.getRegistrations({ page, pageSize, search, status, courseId });
+      const data = await adminApi.getRegistrations({ page, pageSize, search, status, courseId, date });
       setItems(data.items);
       setTotal(data.total);
     } catch (err) {
@@ -50,11 +41,24 @@ export function Registrations() {
     } finally {
       setLoading(false);
     }
-  }, [page, search, status, courseId, showToast]);
+  }, [page, search, status, courseId, date, showToast]);
+
+  // "Bugun" va "Kecha" tugmalaridagi sonlar — tanlangan kurs va holat bo'yicha.
+  const loadSummary = useCallback(async () => {
+    try {
+      setSummary(await adminApi.getRegistrationSummary({ status, courseId }));
+    } catch {
+      setSummary(null);
+    }
+  }, [status, courseId]);
 
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    loadSummary();
+  }, [loadSummary]);
 
   useEffect(() => {
     adminApi
@@ -65,13 +69,18 @@ export function Registrations() {
 
   useEffect(() => {
     setPage(1);
-  }, [search, status, courseId]);
+  }, [search, status, courseId, date]);
+
+  function refresh() {
+    load();
+    loadSummary();
+  }
 
   async function handleQuickStatus(id, newStatus) {
     try {
       await adminApi.updateRegistration(id, { status: newStatus });
       showToast('Holat yangilandi');
-      load();
+      refresh();
     } catch (err) {
       showToast(err.message, 'error');
     }
@@ -82,7 +91,7 @@ export function Registrations() {
       await adminApi.updateRegistration(editing.id, data);
       showToast('Saqlandi');
       setEditing(null);
-      load();
+      refresh();
     } catch (err) {
       showToast(err.message, 'error');
     }
@@ -93,7 +102,7 @@ export function Registrations() {
       await adminApi.deleteRegistration(deleting.id);
       showToast("O'chirildi");
       setDeleting(null);
-      load();
+      refresh();
     } catch (err) {
       showToast(err.message, 'error');
     }
@@ -101,7 +110,7 @@ export function Registrations() {
 
   async function handleExport() {
     try {
-      const res = await fetch(`${adminApi.baseUrl}/api/admin/registrations/export`, {
+      const res = await fetch(adminApi.registrationsExportUrl({ search, status, courseId, date }), {
         headers: { Authorization: `Bearer ${adminApi.getToken()}` },
       });
       if (!res.ok) throw new Error('Eksport qilishda xatolik');
@@ -109,7 +118,7 @@ export function Registrations() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'arizalar.xlsx';
+      a.download = date ? `arizalar-${formatDay(date)}.xlsx` : 'arizalar.xlsx';
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -118,6 +127,9 @@ export function Registrations() {
       showToast(err.message, 'error');
     }
   }
+
+  const today = summary?.today;
+  const yesterday = summary?.yesterday;
 
   return (
     <div>
@@ -157,7 +169,54 @@ export function Registrations() {
             </option>
           ))}
         </select>
+        <div className="date-filter">
+          <input
+            type="date"
+            className="select"
+            value={date}
+            max={today?.date}
+            onChange={(e) => setDate(e.target.value)}
+            aria-label="Kun bo'yicha"
+          />
+          {date && (
+            <button type="button" className="icon-btn" onClick={() => setDate('')} aria-label="Kunni tozalash">
+              <CloseIcon width={14} height={14} />
+            </button>
+          )}
+        </div>
       </div>
+
+      <div className="day-chips">
+        <button type="button" className={`day-chip ${!date ? 'day-chip--active' : ''}`} onClick={() => setDate('')}>
+          Barcha kunlar
+        </button>
+        {today && (
+          <button
+            type="button"
+            className={`day-chip ${date === today.date ? 'day-chip--active' : ''}`}
+            onClick={() => setDate(today.date)}
+          >
+            Bugun · {formatDay(today.date)}
+            <span className="day-chip__count">{today.count} ta</span>
+          </button>
+        )}
+        {yesterday && (
+          <button
+            type="button"
+            className={`day-chip ${date === yesterday.date ? 'day-chip--active' : ''}`}
+            onClick={() => setDate(yesterday.date)}
+          >
+            Kecha · {formatDay(yesterday.date)}
+            <span className="day-chip__count">{yesterday.count} ta</span>
+          </button>
+        )}
+      </div>
+
+      {date && !loading && (
+        <div className="filter-summary">
+          📅 {formatDay(date)} kuni: <strong>{total} ta ariza</strong>
+        </div>
+      )}
 
       <div className="table-wrap">
         {loading ? (
@@ -209,7 +268,9 @@ export function Registrations() {
                       ))}
                     </select>
                   </td>
-                  <td className="muted">{formatDate(r.createdAt)}</td>
+                  <td className="muted" style={{ whiteSpace: 'nowrap' }}>
+                    {formatDateTime(r.createdAt)}
+                  </td>
                   <td>
                     <div style={{ display: 'flex', gap: 6 }}>
                       <button type="button" className="icon-btn" onClick={() => setEditing(r)} aria-label="Tahrirlash">

@@ -22,6 +22,7 @@ router.use(adminAuth);
 router.get('/dashboard/stats', controller.getDashboardStats);
 
 router.get('/registrations', controller.listRegistrations);
+router.get('/registrations/summary', controller.registrationsSummary);
 router.get('/registrations/export', controller.exportRegistrations);
 router.patch('/registrations/:id', controller.updateRegistration);
 router.delete('/registrations/:id', controller.deleteRegistration);

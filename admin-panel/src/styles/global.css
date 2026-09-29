@@ -364,6 +364,58 @@ textarea.input:focus {
   min-width: 200px;
 }
 
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.day-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -4px 0 14px;
+}
+
+.day-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid var(--ca-border);
+  background: var(--ca-surface);
+  border-radius: 100px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ca-text);
+  cursor: pointer;
+}
+
+.day-chip--active {
+  border-color: var(--ca-blue);
+  background: var(--ca-blue);
+  color: #fff;
+}
+
+.day-chip__count {
+  background: var(--ca-gold);
+  color: var(--ca-blue-dark);
+  border-radius: 100px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.filter-summary {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--ca-text-muted);
+}
+
+.filter-summary strong {
+  color: var(--ca-blue);
+}
+
 /* ---------- Table ---------- */
 
 .table-wrap {
